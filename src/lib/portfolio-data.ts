@@ -102,9 +102,9 @@ export const DEFAULT_CONTENT: PortfolioContent = {
   identity: {
     name: "Krish Mishra",
     handle: "KrrishSR4",
-    role: "Cloud / Full-Stack Engineer",
+    role: "DevOps & SRE Engineer",
     location: "India — UTC+05:30",
-    tagline: "I build scalable systems, production-grade web applications, and cloud developer tools.",
+    tagline: "Building scalable, production-ready infrastructure for SaaS systems.",
     intro:
       "Engineering student shipping software that runs in production, not in slide decks. My work centres on distributed monitoring pipelines, repository intelligence, and zero-knowledge security models — designed for real load, real users, and real failure modes. Every project below is deployed, versioned, and open for inspection.",
     availability: "Open to internships and full-time engineering roles — 2026",
