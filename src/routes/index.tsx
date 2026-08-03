@@ -9,9 +9,9 @@ import { SiteFooter } from "@/components/portfolio/footer";
 import { SmoothScroll } from "@/components/portfolio/smooth-scroll";
 import { usePortfolio, useShellClass } from "@/lib/portfolio-store";
 
-const TITLE = "Krish Mishra | DevOps, SRE & Full-Stack Engineer Portfolio";
+const TITLE = "Krish Mishra | DevOps, Cloud, SRE & Full-Stack Engineer Portfolio";
 const DESC =
-  "Portfolio of Krish Mishra, a DevOps, SRE & Full-Stack Engineer building scalable, production-ready infrastructure and SaaS systems.";
+  "Portfolio of Krish Mishra, a DevOps, Cloud, SRE & Full-Stack Engineer building scalable, production-ready infrastructure and SaaS systems.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
