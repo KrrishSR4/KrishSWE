@@ -42,10 +42,10 @@ function Index() {
   const { content } = usePortfolio();
 
   return (
-    <div className={`${shell} min-h-screen bg-background text-foreground`}>
+    <div className={`${shell} min-h-screen bg-background text-foreground flex flex-col`}>
       <SmoothScroll />
       <SiteNav />
-      <main>
+      <main className="overflow-x-hidden flex-1 w-full">
         <h1 className="sr-only">
           {content.identity.name} — {content.identity.role}
         </h1>

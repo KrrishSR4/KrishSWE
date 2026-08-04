@@ -302,7 +302,6 @@ html.lenis body {
 
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
     scrollbar-width: none; /* Firefox */
   }
 
@@ -316,7 +315,6 @@ html.lenis body {
     font-family: var(--font-family-mono);
     font-feature-settings: "ss01", "cv01";
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
   }
 
   ::selection {
