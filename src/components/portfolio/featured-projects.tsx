@@ -72,7 +72,9 @@ function ProjectCard({ project, i }: { project: Project; i: number }) {
         {/* top rail */}
         <div className="flex items-stretch justify-between border-b-2 border-border-strong bg-surface">
           <div className="flex min-w-0 items-center gap-3 px-3 py-2 sm:gap-4 sm:px-4">
-            <span className="label-xs bg-primary px-2 py-1 text-primary-foreground">PRJ_{project.index}</span>
+            <span className="label-xs bg-primary px-2 py-1 text-primary-foreground">
+              PRJ_{project.index}
+            </span>
             <span className="label-xs truncate text-muted-foreground">{project.id}.system</span>
           </div>
           <div className="hidden flex-1 self-stretch bg-[repeating-linear-gradient(45deg,transparent,transparent_6px,currentColor_6px,currentColor_7px)] text-border-strong sm:block" />
@@ -109,13 +111,17 @@ function ProjectCard({ project, i }: { project: Project; i: number }) {
               alt ? "lg:order-2 lg:border-l-2" : "lg:border-r-2"
             }`}
           >
-            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">{project.summary}</p>
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {project.summary}
+            </p>
 
             <div className="mt-7 border-2 border-border-strong bg-surface">
               <div className="label-xs border-b-2 border-border-strong bg-foreground px-3 py-1.5 text-background">
                 Impact
               </div>
-              <p className="px-3 py-4 text-sm font-semibold leading-relaxed sm:text-base">{project.impact}</p>
+              <p className="px-3 py-4 text-sm font-semibold leading-relaxed sm:text-base">
+                {project.impact}
+              </p>
             </div>
 
             <div className="mt-6 flex flex-wrap gap-0 border-2 border-border-strong">
@@ -168,13 +174,17 @@ function ProjectCard({ project, i }: { project: Project; i: number }) {
               {project.metrics.map((m) => (
                 <div key={m.label} className="px-4 py-5 transition-colors hover:bg-surface-2">
                   <p className="label-xs text-muted-foreground">{m.label}</p>
-                  <p className="mt-2 text-xl font-black uppercase tracking-tight sm:text-2xl">{m.value}</p>
+                  <p className="mt-2 text-xl font-black uppercase tracking-tight sm:text-2xl">
+                    {m.value}
+                  </p>
                 </div>
               ))}
             </div>
 
             <div className="flex-1 border-t-2 border-border-strong px-4 py-5">
-              <span className="label-xs text-muted-foreground">Dependencies · {project.stack.length}</span>
+              <span className="label-xs text-muted-foreground">
+                Dependencies · {project.stack.length}
+              </span>
               <div className="mt-3 flex flex-wrap gap-2">
                 {project.stack.map((s) => (
                   <span

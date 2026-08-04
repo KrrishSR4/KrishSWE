@@ -8,7 +8,8 @@ export function AdminAccess() {
         <div className="min-w-0">
           <span className="label-xs text-muted-foreground">Restricted</span>
           <p className="mt-2 text-sm text-muted-foreground">
-            Content management console. Authorised operator access only — not part of the public site.
+            Content management console. Authorised operator access only — not part of the public
+            site.
           </p>
         </div>
         <Link
@@ -41,13 +42,20 @@ export function SiteFooter() {
               ["focus", "Focus"],
             ].map(([h, l]) => (
               <li key={h}>
-                <Link to="/" hash={h} className="text-muted-foreground transition-colors hover:text-foreground">
+                <Link
+                  to="/"
+                  hash={h}
+                  className="text-muted-foreground transition-colors hover:text-foreground"
+                >
                   {l}
                 </Link>
               </li>
             ))}
             <li>
-              <Link to="/case-studies" className="text-muted-foreground transition-colors hover:text-foreground">
+              <Link
+                to="/case-studies"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
                 Case Studies
               </Link>
             </li>
@@ -57,17 +65,30 @@ export function SiteFooter() {
           <span className="label-xs text-muted-foreground">Channels</span>
           <ul className="mt-3 space-y-2 text-sm">
             <li>
-              <a href={`mailto:${content.contact.email}`} className="text-muted-foreground hover:text-foreground">
+              <a
+                href={`mailto:${content.contact.email}`}
+                className="text-muted-foreground hover:text-foreground"
+              >
                 Email
               </a>
             </li>
             <li>
-              <a href={content.contact.github} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground">
+              <a
+                href={content.contact.github}
+                target="_blank"
+                rel="noreferrer"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 GitHub
               </a>
             </li>
             <li>
-              <a href={content.contact.linkedin} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground">
+              <a
+                href={content.contact.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="text-muted-foreground hover:text-foreground"
+              >
                 LinkedIn
               </a>
             </li>
@@ -76,8 +97,12 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <span className="label-xs text-muted-foreground">© {new Date().getFullYear()} {content.identity.handle}</span>
-          <span className="label-xs text-muted-foreground">Built with TypeScript · Deployed on the edge</span>
+          <span className="label-xs text-muted-foreground">
+            © {new Date().getFullYear()} {content.identity.handle}
+          </span>
+          <span className="label-xs text-muted-foreground">
+            Built with TypeScript · Deployed on the edge
+          </span>
         </div>
       </div>
     </footer>

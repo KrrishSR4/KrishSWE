@@ -179,7 +179,6 @@
   --primary-foreground: oklch(0.98 0.003 95);
 }
 
-
 /* Font pairings selectable from the admin panel */
 .font-jetbrains {
   --font-family-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -303,6 +302,12 @@ html.lenis body {
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  html::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
   }
 
   body {
@@ -311,6 +316,7 @@ html.lenis body {
     font-family: var(--font-family-mono);
     font-feature-settings: "ss01", "cv01";
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
   ::selection {

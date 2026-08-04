@@ -20,14 +20,15 @@ export function SmoothScroll() {
     lenis.on("scroll", ScrollTrigger.update);
     (window as unknown as { lenis?: Lenis }).lenis = lenis;
 
-
     const raf = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
     // Anchor links should route through Lenis for the eased jump.
     const onClick = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement | null)?.closest?.('a[href^="#"]') as HTMLAnchorElement | null;
+      const target = (e.target as HTMLElement | null)?.closest?.(
+        'a[href^="#"]',
+      ) as HTMLAnchorElement | null;
       if (!target) return;
       const id = target.getAttribute("href");
       if (!id || id === "#") return;
@@ -44,7 +45,6 @@ export function SmoothScroll() {
       delete (window as unknown as { lenis?: Lenis }).lenis;
       lenis.destroy();
     };
-
   }, []);
 
   return null;

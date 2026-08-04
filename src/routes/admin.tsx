@@ -85,7 +85,8 @@ function LoginGate({ onPass }: { onPass: () => void }) {
         <form onSubmit={submit} className="p-5 sm:p-6">
           <h1 className="text-2xl font-bold uppercase tracking-tight">Admin Console</h1>
           <p className="mt-2 text-[0.8rem] leading-relaxed text-muted-foreground">
-            Content management only. This area is not part of the public site and is not intended for visitors.
+            Content management only. This area is not part of the public site and is not intended
+            for visitors.
           </p>
 
           <label className="label-xs mt-7 block text-muted-foreground" htmlFor="admin-name">
@@ -122,7 +123,9 @@ function LoginGate({ onPass }: { onPass: () => void }) {
           </div>
 
           {error ? (
-            <p className="label-xs mt-5 border border-destructive px-3 py-2.5 text-destructive">{error}</p>
+            <p className="label-xs mt-5 border border-destructive px-3 py-2.5 text-destructive">
+              {error}
+            </p>
           ) : null}
 
           <button
@@ -132,13 +135,16 @@ function LoginGate({ onPass }: { onPass: () => void }) {
             Authenticate
           </button>
 
-          <Link to="/" className="label-xs mt-4 block text-center text-muted-foreground hover:text-foreground">
+          <Link
+            to="/"
+            className="label-xs mt-4 block text-center text-muted-foreground hover:text-foreground"
+          >
             ← Back to site
           </Link>
 
           <p className="label-xs mt-6 border-t border-border pt-4 leading-relaxed text-muted-foreground">
-            Warning: this gate protects content editing in this browser only. Anything saved here is stored locally on
-            this device.
+            Warning: this gate protects content editing in this browser only. Anything saved here is
+            stored locally on this device.
           </p>
         </form>
       </div>
@@ -196,7 +202,10 @@ function Console({ onExit }: { onExit: () => void }) {
   }
 
   function patchProject(id: string, patch: Partial<Project>) {
-    update((c) => ({ ...c, projects: c.projects.map((p) => (p.id === id ? { ...p, ...patch } : p)) }));
+    update((c) => ({
+      ...c,
+      projects: c.projects.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+    }));
   }
 
   function addProject() {
@@ -254,10 +263,16 @@ function Console({ onExit }: { onExit: () => void }) {
           </div>
           <div className="flex shrink-0 items-center gap-2">
             {saved ? <span className="label-xs text-signal">SAVED</span> : null}
-            <Link to="/" className="label-xs border border-border px-3 py-2 hover:border-foreground">
+            <Link
+              to="/"
+              className="label-xs border border-border px-3 py-2 hover:border-foreground"
+            >
               View site
             </Link>
-            <button onClick={onExit} className="label-xs border border-border px-3 py-2 hover:border-destructive hover:text-destructive">
+            <button
+              onClick={onExit}
+              className="label-xs border border-border px-3 py-2 hover:border-destructive hover:text-destructive"
+            >
               Lock
             </button>
           </div>
@@ -268,7 +283,9 @@ function Console({ onExit }: { onExit: () => void }) {
               key={t}
               onClick={() => setTab(t)}
               className={`label-xs whitespace-nowrap px-4 py-3 ${
-                tab === t ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:text-foreground"
+                tab === t
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-background text-muted-foreground hover:text-foreground"
               }`}
             >
               {t}
@@ -279,30 +296,68 @@ function Console({ onExit }: { onExit: () => void }) {
 
       <div className="mx-auto max-w-[1200px] px-4 py-8 sm:px-6">
         <p className="label-xs mb-8 border border-accent px-4 py-3 leading-relaxed text-accent">
-          Warning — content management area. Changes save to this browser only and take effect immediately on the public
-          site view.
+          Warning — content management area. Changes save to this browser only and take effect
+          immediately on the public site view.
         </p>
 
         {tab === "Content" && (
           <div className="grid gap-5 md:grid-cols-2">
-            <Field label="Name" value={content.identity.name} onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, name: v } }))} />
-            <Field label="Handle" value={content.identity.handle} onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, handle: v } }))} />
-            <Field label="Role" value={content.identity.role} onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, role: v } }))} />
-            <Field label="Location" value={content.identity.location} onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, location: v } }))} />
+            <Field
+              label="Name"
+              value={content.identity.name}
+              onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, name: v } }))}
+            />
+            <Field
+              label="Handle"
+              value={content.identity.handle}
+              onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, handle: v } }))}
+            />
+            <Field
+              label="Role"
+              value={content.identity.role}
+              onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, role: v } }))}
+            />
+            <Field
+              label="Location"
+              value={content.identity.location}
+              onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, location: v } }))}
+            />
             <div className="md:col-span-2">
-              <Field label="Tagline" area value={content.identity.tagline} onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, tagline: v } }))} />
+              <Field
+                label="Tagline"
+                area
+                value={content.identity.tagline}
+                onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, tagline: v } }))}
+              />
             </div>
             <div className="md:col-span-2">
-              <Field label="Intro paragraph" area value={content.identity.intro} onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, intro: v } }))} />
+              <Field
+                label="Intro paragraph"
+                area
+                value={content.identity.intro}
+                onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, intro: v } }))}
+              />
             </div>
             <div className="md:col-span-2">
-              <Field label="Availability line" value={content.identity.availability} onChange={(v) => update((c) => ({ ...c, identity: { ...c.identity, availability: v } }))} />
+              <Field
+                label="Availability line"
+                value={content.identity.availability}
+                onChange={(v) =>
+                  update((c) => ({ ...c, identity: { ...c.identity, availability: v } }))
+                }
+              />
             </div>
             <div className="md:col-span-2 flex flex-wrap gap-3 border-t border-border pt-6">
-              <button onClick={flash} className="label-xs border border-primary bg-primary px-5 py-4 text-primary-foreground">
+              <button
+                onClick={flash}
+                className="label-xs border border-primary bg-primary px-5 py-4 text-primary-foreground"
+              >
                 Save changes
               </button>
-              <button onClick={reset} className="label-xs border border-destructive px-5 py-4 text-destructive">
+              <button
+                onClick={reset}
+                className="label-xs border border-destructive px-5 py-4 text-destructive"
+              >
                 Reset to defaults
               </button>
             </div>
@@ -311,7 +366,10 @@ function Console({ onExit }: { onExit: () => void }) {
 
         {tab === "Projects" && (
           <div className="flex flex-col gap-5">
-            <button onClick={addProject} className="label-xs self-start border border-primary bg-primary px-5 py-4 text-primary-foreground">
+            <button
+              onClick={addProject}
+              className="label-xs self-start border border-primary bg-primary px-5 py-4 text-primary-foreground"
+            >
               + Add project
             </button>
             {content.projects.map((p) => (
@@ -323,21 +381,48 @@ function Console({ onExit }: { onExit: () => void }) {
                   <span className="label-xs shrink-0 text-muted-foreground">{p.status}</span>
                 </summary>
                 <div className="grid gap-4 p-4 md:grid-cols-2">
-                  <Field label="Index" value={p.index} onChange={(v) => patchProject(p.id, { index: v })} />
-                  <Field label="Name" value={p.name} onChange={(v) => patchProject(p.id, { name: v })} />
+                  <Field
+                    label="Index"
+                    value={p.index}
+                    onChange={(v) => patchProject(p.id, { index: v })}
+                  />
+                  <Field
+                    label="Name"
+                    value={p.name}
+                    onChange={(v) => patchProject(p.id, { name: v })}
+                  />
                   <div className="md:col-span-2">
-                    <Field label="Positioning" value={p.positioning} onChange={(v) => patchProject(p.id, { positioning: v })} />
+                    <Field
+                      label="Positioning"
+                      value={p.positioning}
+                      onChange={(v) => patchProject(p.id, { positioning: v })}
+                    />
                   </div>
                   <div className="md:col-span-2">
-                    <Field label="Summary" area value={p.summary} onChange={(v) => patchProject(p.id, { summary: v })} />
+                    <Field
+                      label="Summary"
+                      area
+                      value={p.summary}
+                      onChange={(v) => patchProject(p.id, { summary: v })}
+                    />
                   </div>
-                  <Field label="Repository URL" value={p.repo} onChange={(v) => patchProject(p.id, { repo: v })} />
-                  <Field label="Live URL" value={p.live ?? ""} onChange={(v) => patchProject(p.id, { live: v })} />
+                  <Field
+                    label="Repository URL"
+                    value={p.repo}
+                    onChange={(v) => patchProject(p.id, { repo: v })}
+                  />
+                  <Field
+                    label="Live URL"
+                    value={p.live ?? ""}
+                    onChange={(v) => patchProject(p.id, { live: v })}
+                  />
                   <label className="block">
                     <span className="label-xs text-muted-foreground">Status</span>
                     <select
                       value={p.status}
-                      onChange={(e) => patchProject(p.id, { status: e.target.value as ProjectStatus })}
+                      onChange={(e) =>
+                        patchProject(p.id, { status: e.target.value as ProjectStatus })
+                      }
                       className="mt-2 w-full border border-border bg-background px-3 py-3 text-sm outline-none focus:border-primary"
                     >
                       {STATUSES.map((s) => (
@@ -347,25 +432,69 @@ function Console({ onExit }: { onExit: () => void }) {
                       ))}
                     </select>
                   </label>
-                  <Field label="Tags (comma separated)" value={p.tags.join(", ")} onChange={(v) => patchProject(p.id, { tags: v.split(",").map((s) => s.trim()).filter(Boolean) })} />
+                  <Field
+                    label="Tags (comma separated)"
+                    value={p.tags.join(", ")}
+                    onChange={(v) =>
+                      patchProject(p.id, {
+                        tags: v
+                          .split(",")
+                          .map((s) => s.trim())
+                          .filter(Boolean),
+                      })
+                    }
+                  />
                   <div className="md:col-span-2">
-                    <Field label="Stack (comma separated)" value={p.stack.join(", ")} onChange={(v) => patchProject(p.id, { stack: v.split(",").map((s) => s.trim()).filter(Boolean) })} />
+                    <Field
+                      label="Stack (comma separated)"
+                      value={p.stack.join(", ")}
+                      onChange={(v) =>
+                        patchProject(p.id, {
+                          stack: v
+                            .split(",")
+                            .map((s) => s.trim())
+                            .filter(Boolean),
+                        })
+                      }
+                    />
                   </div>
                   <div className="md:col-span-2">
-                    <Field label="Impact" area value={p.impact} onChange={(v) => patchProject(p.id, { impact: v })} />
+                    <Field
+                      label="Impact"
+                      area
+                      value={p.impact}
+                      onChange={(v) => patchProject(p.id, { impact: v })}
+                    />
                   </div>
                   <div className="md:col-span-2">
-                    <Field label="Problem" area value={p.problem} onChange={(v) => patchProject(p.id, { problem: v })} />
+                    <Field
+                      label="Problem"
+                      area
+                      value={p.problem}
+                      onChange={(v) => patchProject(p.id, { problem: v })}
+                    />
                   </div>
                   <div className="md:col-span-2">
-                    <Field label="Solution" area value={p.solution} onChange={(v) => patchProject(p.id, { solution: v })} />
+                    <Field
+                      label="Solution"
+                      area
+                      value={p.solution}
+                      onChange={(v) => patchProject(p.id, { solution: v })}
+                    />
                   </div>
                   <div className="md:col-span-2">
                     <Field
                       label="Architecture (one step per line)"
                       area
                       value={p.architecture.join("\n")}
-                      onChange={(v) => patchProject(p.id, { architecture: v.split("\n").map((s) => s.trim()).filter(Boolean) })}
+                      onChange={(v) =>
+                        patchProject(p.id, {
+                          architecture: v
+                            .split("\n")
+                            .map((s) => s.trim())
+                            .filter(Boolean),
+                        })
+                      }
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -379,16 +508,25 @@ function Console({ onExit }: { onExit: () => void }) {
                             .split("\n")
                             .map((line) => line.split("="))
                             .filter((parts) => parts.length >= 2)
-                            .map((parts) => ({ label: parts[0].trim(), value: parts.slice(1).join("=").trim() })),
+                            .map((parts) => ({
+                              label: parts[0].trim(),
+                              value: parts.slice(1).join("=").trim(),
+                            })),
                         })
                       }
                     />
                   </div>
                   <div className="md:col-span-2 flex flex-wrap gap-3 border-t border-border pt-4">
-                    <button onClick={flash} className="label-xs border border-primary bg-primary px-5 py-4 text-primary-foreground">
+                    <button
+                      onClick={flash}
+                      className="label-xs border border-primary bg-primary px-5 py-4 text-primary-foreground"
+                    >
                       Save project
                     </button>
-                    <button onClick={() => removeProject(p.id)} className="label-xs border border-destructive px-5 py-4 text-destructive">
+                    <button
+                      onClick={() => removeProject(p.id)}
+                      className="label-xs border border-destructive px-5 py-4 text-destructive"
+                    >
                       Remove project
                     </button>
                   </div>
@@ -408,7 +546,9 @@ function Console({ onExit }: { onExit: () => void }) {
                     key={t}
                     onClick={() => setSetting("theme", t)}
                     className={`label-xs border px-4 py-3 ${
-                      content.settings.theme === t ? "border-primary bg-primary text-primary-foreground" : "border-border"
+                      content.settings.theme === t
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border"
                     }`}
                   >
                     {t}
@@ -424,7 +564,9 @@ function Console({ onExit }: { onExit: () => void }) {
                     key={f}
                     onClick={() => setSetting("font", f)}
                     className={`label-xs border px-4 py-3 ${
-                      content.settings.font === f ? "border-primary bg-primary text-primary-foreground" : "border-border"
+                      content.settings.font === f
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border"
                     }`}
                   >
                     {f}
@@ -440,7 +582,9 @@ function Console({ onExit }: { onExit: () => void }) {
                     key={d}
                     onClick={() => setSetting("density", d)}
                     className={`label-xs border px-4 py-3 ${
-                      content.settings.density === d ? "border-primary bg-primary text-primary-foreground" : "border-border"
+                      content.settings.density === d
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border"
                     }`}
                   >
                     {d}
@@ -454,14 +598,23 @@ function Console({ onExit }: { onExit: () => void }) {
         {tab === "Sections" && (
           <div className="divide-y divide-border border border-border-strong bg-card">
             {content.settings.sectionOrder.map((key, i) => (
-              <div key={key} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-4">
+              <div
+                key={key}
+                className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-4"
+              >
                 <span className="label-xs text-primary">{String(i + 1).padStart(2, "0")}</span>
                 <span className="min-w-0 truncate text-sm">{SECTION_LABELS[key] ?? key}</span>
                 <span className="flex shrink-0 gap-2">
-                  <button onClick={() => moveSection(i, -1)} className="label-xs border border-border px-3 py-2 hover:border-foreground">
+                  <button
+                    onClick={() => moveSection(i, -1)}
+                    className="label-xs border border-border px-3 py-2 hover:border-foreground"
+                  >
                     ↑
                   </button>
-                  <button onClick={() => moveSection(i, 1)} className="label-xs border border-border px-3 py-2 hover:border-foreground">
+                  <button
+                    onClick={() => moveSection(i, 1)}
+                    className="label-xs border border-border px-3 py-2 hover:border-foreground"
+                  >
                     ↓
                   </button>
                 </span>
@@ -472,15 +625,39 @@ function Console({ onExit }: { onExit: () => void }) {
 
         {tab === "Contact" && (
           <div className="grid gap-5 md:grid-cols-2">
-            <Field label="Email" value={content.contact.email} onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, email: v } }))} />
-            <Field label="GitHub URL" value={content.contact.github} onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, github: v } }))} />
-            <Field label="LinkedIn URL" value={content.contact.linkedin} onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, linkedin: v } }))} />
-            <Field label="Resume URL" value={content.contact.resumeUrl} onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, resumeUrl: v } }))} />
+            <Field
+              label="Email"
+              value={content.contact.email}
+              onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, email: v } }))}
+            />
+            <Field
+              label="GitHub URL"
+              value={content.contact.github}
+              onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, github: v } }))}
+            />
+            <Field
+              label="LinkedIn URL"
+              value={content.contact.linkedin}
+              onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, linkedin: v } }))}
+            />
+            <Field
+              label="Resume URL"
+              value={content.contact.resumeUrl}
+              onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, resumeUrl: v } }))}
+            />
             <div className="md:col-span-2">
-              <Field label="Contact note" area value={content.contact.note} onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, note: v } }))} />
+              <Field
+                label="Contact note"
+                area
+                value={content.contact.note}
+                onChange={(v) => update((c) => ({ ...c, contact: { ...c.contact, note: v } }))}
+              />
             </div>
             <div className="md:col-span-2">
-              <button onClick={flash} className="label-xs border border-primary bg-primary px-5 py-4 text-primary-foreground">
+              <button
+                onClick={flash}
+                className="label-xs border border-primary bg-primary px-5 py-4 text-primary-foreground"
+              >
                 Save contact info
               </button>
             </div>

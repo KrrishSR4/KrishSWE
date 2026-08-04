@@ -2,7 +2,9 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 function reduced() {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return (
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 }
 
 export function Reveal({
@@ -147,7 +149,10 @@ export function SectionHeader({
           <span data-head className="label-xs text-primary">
             {index}
           </span>
-          <h2 data-head className="text-3xl font-bold uppercase tracking-tight sm:text-4xl md:text-5xl">
+          <h2
+            data-head
+            className="text-3xl font-bold uppercase tracking-tight sm:text-4xl md:text-5xl"
+          >
             {title}
           </h2>
         </div>
@@ -162,13 +167,23 @@ export function SectionHeader({
   );
 }
 
-export function Tag({ children, tone = "default" }: { children: ReactNode; tone?: "default" | "primary" | "signal" }) {
+export function Tag({
+  children,
+  tone = "default",
+}: {
+  children: ReactNode;
+  tone?: "default" | "primary" | "signal";
+}) {
   const tones = {
     default: "border-border text-muted-foreground",
     primary: "border-primary text-primary",
     signal: "border-signal text-signal",
   } as const;
-  return <span className={`label-xs inline-flex items-center border px-2 py-1 ${tones[tone]}`}>{children}</span>;
+  return (
+    <span className={`label-xs inline-flex items-center border px-2 py-1 ${tones[tone]}`}>
+      {children}
+    </span>
+  );
 }
 
 // ScrollTrigger is registered in src/lib/gsap.ts

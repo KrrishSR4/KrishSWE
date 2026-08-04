@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { usePortfolio } from "@/lib/portfolio-store";
 import { ThemeToggle } from "./theme-toggle";
 
-
 const NAV = [
   { href: "#projects", label: "Projects" },
   { href: "#stack", label: "Stack" },
@@ -16,7 +15,10 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-50 border-b border-border-strong bg-background/92 backdrop-blur-sm">
       <div className="mx-auto flex max-w-[1400px] items-center gap-4 px-4 py-3 sm:px-6">
-        <Link to="/" className="label-xs shrink-0 border border-border-strong px-2 py-1.5 hover:bg-primary hover:text-primary-foreground">
+        <Link
+          to="/"
+          className="label-xs shrink-0 border border-border-strong px-2 py-1.5 hover:bg-primary hover:text-primary-foreground"
+        >
           {content.identity.handle}
         </Link>
         <nav className="hidden min-w-0 flex-1 items-center gap-5 overflow-hidden lg:flex">

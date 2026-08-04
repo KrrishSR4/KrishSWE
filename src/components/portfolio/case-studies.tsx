@@ -5,7 +5,9 @@ import { gsap } from "@/lib/gsap";
 import { Reveal, SectionHeader } from "./primitives";
 
 function reduced() {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return (
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 }
 
 function Hatch({ className = "" }: { className?: string }) {
@@ -31,7 +33,9 @@ function StackTape({ items, reverse }: { items: string[]; reverse?: boolean }) {
   const row = [...items, ...items, ...items, ...items];
   return (
     <div className="overflow-hidden border-y-2 border-border-strong bg-foreground py-2">
-      <div className={`marquee-track flex w-max gap-6 whitespace-nowrap ${reverse ? "[animation-direction:reverse]" : ""}`}>
+      <div
+        className={`marquee-track flex w-max gap-6 whitespace-nowrap ${reverse ? "[animation-direction:reverse]" : ""}`}
+      >
         {row.map((s, i) => (
           <span key={`${s}-${i}`} className="label-xs flex items-center gap-6 text-background">
             {s}
@@ -82,9 +86,17 @@ function Pipeline({ steps }: { steps: string[] }) {
 
   return (
     <ol ref={ref} className="relative pl-1">
-      <span data-spine aria-hidden className="absolute left-[1.05rem] top-2 h-[calc(100%-1rem)] w-0.5 bg-primary" />
+      <span
+        data-spine
+        aria-hidden
+        className="absolute left-[1.05rem] top-2 h-[calc(100%-1rem)] w-0.5 bg-primary"
+      />
       {steps.map((s, i) => (
-        <li key={s} data-step className="relative grid grid-cols-[2.2rem_1fr] items-start gap-4 py-3">
+        <li
+          key={s}
+          data-step
+          className="relative grid grid-cols-[2.2rem_1fr] items-start gap-4 py-3"
+        >
           <span className="label-xs z-10 grid h-9 w-9 place-items-center border-2 border-border-strong bg-background text-primary">
             {String(i + 1).padStart(2, "0")}
           </span>
@@ -127,8 +139,12 @@ function CaseCard({ p, i }: { p: Project; i: number }) {
       >
         {/* rail */}
         <div className="flex items-stretch justify-between border-b-2 border-border-strong bg-surface">
-          <span className="label-xs bg-primary px-3 py-2 text-primary-foreground">CASE_{p.index}</span>
-          <span className="label-xs flex items-center px-3 py-2 text-muted-foreground">{p.id}.study</span>
+          <span className="label-xs bg-primary px-3 py-2 text-primary-foreground">
+            CASE_{p.index}
+          </span>
+          <span className="label-xs flex items-center px-3 py-2 text-muted-foreground">
+            {p.id}.study
+          </span>
           <Hatch className="hidden flex-1 sm:block" />
           <span className="label-xs flex items-center border-l-2 border-border-strong px-3 py-2 text-signal">
             {p.status}
@@ -162,14 +178,20 @@ function CaseCard({ p, i }: { p: Project; i: number }) {
           {p.metrics.map((m) => (
             <div key={m.label} className="px-4 py-5 transition-colors hover:bg-surface">
               <p className="label-xs text-muted-foreground">{m.label}</p>
-              <p className="mt-2 text-2xl font-black uppercase tracking-tighter sm:text-3xl">{m.value}</p>
+              <p className="mt-2 text-2xl font-black uppercase tracking-tighter sm:text-3xl">
+                {m.value}
+              </p>
             </div>
           ))}
         </div>
 
         <div className="grid lg:grid-cols-[1.1fr_1fr]">
-          <div className={`p-4 sm:p-8 ${alt ? "lg:order-2 lg:border-l-2" : "lg:border-r-2"} border-border-strong`}>
-            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">{p.summary}</p>
+          <div
+            className={`p-4 sm:p-8 ${alt ? "lg:order-2 lg:border-l-2" : "lg:border-r-2"} border-border-strong`}
+          >
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {p.summary}
+            </p>
             <Block label="Problem">{p.problem}</Block>
             <Block label="Solution">{p.solution}</Block>
             <Block label="Impact">
@@ -247,7 +269,12 @@ export function CaseStudies() {
   return (
     <section className="section-pad border-t-2 border-border-strong bg-surface">
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
-        <SectionHeader id="casestudies" index="02" title="Case Studies" meta="problem · solution · architecture · impact" />
+        <SectionHeader
+          id="casestudies"
+          index="02"
+          title="Case Studies"
+          meta="problem · solution · architecture · impact"
+        />
 
         {/* index board */}
         <Reveal>
@@ -259,7 +286,9 @@ export function CaseStudies() {
                 className="group px-4 py-5 transition-colors hover:bg-foreground hover:text-background"
               >
                 <span className="label-xs text-primary group-hover:text-background">{p.index}</span>
-                <p className="mt-3 truncate text-lg font-black uppercase tracking-tighter">{p.name}</p>
+                <p className="mt-3 truncate text-lg font-black uppercase tracking-tighter">
+                  {p.name}
+                </p>
                 <p className="mt-2 line-clamp-2 text-[0.75rem] leading-relaxed text-muted-foreground group-hover:text-background/70">
                   {p.positioning}
                 </p>
@@ -283,10 +312,22 @@ export function CaseStudies() {
             </div>
             <div className="grid divide-y-2 divide-border-strong sm:grid-cols-2 sm:divide-x-2 lg:grid-cols-4 lg:divide-y-0">
               {[
-                { t: "Design for failure", d: "Every path has a timeout, a retry budget and a fallback. Failure modes are written down before the happy path." },
-                { t: "Measure, then optimise", d: "No optimisation ships without a before/after number from real traffic — p95 latency, cost per request, error rate." },
-                { t: "Boring infrastructure", d: "Postgres, Redis, containers, IaC. Novelty is spent on the product, not on the platform underneath it." },
-                { t: "Ship small, ship often", d: "Trunk-based flow, CI gates, automated rollbacks. Small diffs make incidents short and reversible." },
+                {
+                  t: "Design for failure",
+                  d: "Every path has a timeout, a retry budget and a fallback. Failure modes are written down before the happy path.",
+                },
+                {
+                  t: "Measure, then optimise",
+                  d: "No optimisation ships without a before/after number from real traffic — p95 latency, cost per request, error rate.",
+                },
+                {
+                  t: "Boring infrastructure",
+                  d: "Postgres, Redis, containers, IaC. Novelty is spent on the product, not on the platform underneath it.",
+                },
+                {
+                  t: "Ship small, ship often",
+                  d: "Trunk-based flow, CI gates, automated rollbacks. Small diffs make incidents short and reversible.",
+                },
               ].map((x) => (
                 <div key={x.t} className="px-4 py-6 transition-colors hover:bg-surface">
                   <p className="text-base font-black uppercase tracking-tight">{x.t}</p>

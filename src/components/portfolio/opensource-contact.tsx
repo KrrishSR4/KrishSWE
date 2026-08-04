@@ -4,7 +4,6 @@ import { usePortfolio } from "@/lib/portfolio-store";
 import { gsap } from "@/lib/gsap";
 import { Reveal, SectionHeader } from "./primitives";
 
-
 interface Day {
   date: string;
   count: number;
@@ -14,7 +13,10 @@ interface Day {
 const LEVELS = ["bg-surface-2", "bg-primary/25", "bg-primary/45", "bg-primary/70", "bg-primary"];
 const DAY_LABELS = ["Mon", "Wed", "Fri"];
 
-async function fetchContributions(handle: string, year: string): Promise<{ days: Day[]; total: number }> {
+async function fetchContributions(
+  handle: string,
+  year: string,
+): Promise<{ days: Day[]; total: number }> {
   const res = await fetch(
     `https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(handle)}?y=${year}`,
   );
@@ -249,7 +251,11 @@ function Last30({ handle }: { handle: string }) {
       <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-border-strong bg-foreground px-4 py-3">
         <span className="label-xs text-background">Last 30 days</span>
         <span className="label-xs text-background/70">
-          {isPending ? "loading…" : isError ? "unavailable" : `${total} commits · peak ${peak?.count ?? 0}`}
+          {isPending
+            ? "loading…"
+            : isError
+              ? "unavailable"
+              : `${total} commits · peak ${peak?.count ?? 0}`}
         </span>
       </div>
 
@@ -277,7 +283,9 @@ function Last30({ handle }: { handle: string }) {
         <div className="mt-3 flex items-center justify-between border-t-2 border-border-strong pt-2">
           <span className="label-xs text-muted-foreground">-30d</span>
           <span className="label-xs text-foreground">
-            {hover ? `${hover.date} · ${hover.count} contribution${hover.count === 1 ? "" : "s"}` : `avg ${avg}/day`}
+            {hover
+              ? `${hover.date} · ${hover.count} contribution${hover.count === 1 ? "" : "s"}`
+              : `avg ${avg}/day`}
           </span>
           <span className="label-xs text-muted-foreground">today</span>
         </div>
@@ -304,7 +312,12 @@ export function OpenSource() {
 
   return (
     <section className="section-pad mx-auto max-w-[1400px] px-4 sm:px-6">
-      <SectionHeader id="github" index="05" title="Open Source" meta={`github.com/${content.identity.handle}`} />
+      <SectionHeader
+        id="github"
+        index="05"
+        title="Open Source"
+        meta={`github.com/${content.identity.handle}`}
+      />
 
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_1fr]">
         <div className="flex flex-col gap-6">
@@ -317,7 +330,6 @@ export function OpenSource() {
         </div>
 
         <Reveal delay={80}>
-
           <div className="flex h-full flex-col border border-border-strong bg-card">
             <div className="border-b border-border px-4 py-3">
               <span className="label-xs text-muted-foreground">Pinned repositories</span>
@@ -335,7 +347,9 @@ export function OpenSource() {
                       <span className="truncate text-sm font-semibold">{r.name}</span>
                       <span className="label-xs shrink-0 text-muted-foreground">{r.language}</span>
                     </div>
-                    <p className="mt-2 text-[0.8rem] leading-relaxed text-muted-foreground">{r.description}</p>
+                    <p className="mt-2 text-[0.8rem] leading-relaxed text-muted-foreground">
+                      {r.description}
+                    </p>
                   </a>
                 </li>
               ))}
@@ -373,7 +387,9 @@ export function Contact() {
           <Reveal>
             <div>
               <p className="text-xl leading-snug sm:text-2xl">{content.identity.availability}</p>
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">{c.note}</p>
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                {c.note}
+              </p>
             </div>
           </Reveal>
           <Reveal delay={60}>

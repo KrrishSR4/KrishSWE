@@ -125,7 +125,15 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       summary:
         "Continuous uptime, performance, and search-visibility monitoring for production websites. Scheduled crawls, Core Web Vitals capture, regression alerting, and historical trend analysis in a single control surface.",
       tags: ["Monitoring", "SEO Analytics", "Cloud Native", "Production Ready"],
-      stack: ["React", "TypeScript", "Node.js", "Firebase", "Cloud Functions", "Firestore", "Lighthouse API"],
+      stack: [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "Firebase",
+        "Cloud Functions",
+        "Firestore",
+        "Lighthouse API",
+      ],
       repo: "https://github.com/KrrishSR4/WebMetricsX.git",
       live: "https://webmetricsx.web.app/",
       status: "Production",
@@ -152,15 +160,25 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       id: "repoxray",
       index: "02",
       name: "RepoXray",
-      positioning: "Structured repository understanding for engineers entering unfamiliar codebases.",
+      positioning:
+        "Structured repository understanding for engineers entering unfamiliar codebases.",
       summary:
         "AI-assisted analysis of any GitHub repository: dependency-aware structure mapping, file-level explanations, and generated learning paths that move a reader from entry point to core logic in a defined order.",
       tags: ["Repo Intelligence", "Developer Tooling", "Cloud Native"],
-      stack: ["React", "TypeScript", "Node.js", "GitHub API", "LLM Pipeline", "Firebase", "Tailwind"],
+      stack: [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "GitHub API",
+        "LLM Pipeline",
+        "Firebase",
+        "Tailwind",
+      ],
       repo: "https://github.com/KrrishSR4/RepoXray.git",
       live: "https://repoxray.web.app/",
       status: "Production",
-      impact: "Compresses codebase onboarding from days of blind file-opening into a guided, ordered read path.",
+      impact:
+        "Compresses codebase onboarding from days of blind file-opening into a guided, ordered read path.",
       problem:
         "Reading an unfamiliar repository has no defined entry point. Contributors open files at random, misread ownership boundaries, and abandon the project before understanding its core.",
       solution:
@@ -216,10 +234,18 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       summary:
         "Client-side encrypted file transfer with key material kept out of transport and storage. Expiring links, download ceilings, and full server blindness to plaintext content by construction.",
       tags: ["Zero-Knowledge Sharing", "Secure by Design", "Enterprise Grade"],
-      stack: ["TypeScript", "Web Crypto API", "AES-GCM", "React", "Object Storage", "Edge Functions"],
+      stack: [
+        "TypeScript",
+        "Web Crypto API",
+        "AES-GCM",
+        "React",
+        "Object Storage",
+        "Edge Functions",
+      ],
       repo: "https://github.com/KrrishSR4/SecureShare.git",
       status: "In Development",
-      impact: "Removes the provider from the trust boundary — a storage compromise yields ciphertext only.",
+      impact:
+        "Removes the provider from the trust boundary — a storage compromise yields ciphertext only.",
       problem:
         "Mainstream file sharing puts the provider inside the trust boundary. Server-side encryption still means server-side keys, and a breach or subpoena exposes plaintext.",
       solution:
@@ -387,7 +413,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
     {
       id: "f1",
       title: "Cloud Engineering",
-      detail: "Multi-region deployment patterns, cost-aware architecture, and IAM boundaries on AWS and GCP.",
+      detail:
+        "Multi-region deployment patterns, cost-aware architecture, and IAM boundaries on AWS and GCP.",
       state: "ACTIVE",
     },
     {
@@ -399,7 +426,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
     {
       id: "f3",
       title: "Production Systems",
-      detail: "Failure-mode analysis, backpressure, retries with jitter, and graceful degradation under load.",
+      detail:
+        "Failure-mode analysis, backpressure, retries with jitter, and graceful degradation under load.",
       state: "ACTIVE",
     },
     {
@@ -411,13 +439,15 @@ export const DEFAULT_CONTENT: PortfolioContent = {
     {
       id: "f5",
       title: "Scalable Web Apps",
-      detail: "Streaming data flows, cache invalidation strategy, and interaction budgets under 100ms.",
+      detail:
+        "Streaming data flows, cache invalidation strategy, and interaction budgets under 100ms.",
       state: "ACTIVE",
     },
     {
       id: "f6",
       title: "Secure Architectures",
-      detail: "Threat modelling, client-side cryptography, and minimising the server trust boundary.",
+      detail:
+        "Threat modelling, client-side cryptography, and minimising the server trust boundary.",
       state: "RESEARCH",
     },
   ],

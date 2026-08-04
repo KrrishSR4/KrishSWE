@@ -32,7 +32,8 @@ export function ScrollProgress() {
   const c = 2 * Math.PI * r;
 
   const toTop = () => {
-    const lenis = (window as unknown as { lenis?: { scrollTo: (t: number, o?: object) => void } }).lenis;
+    const lenis = (window as unknown as { lenis?: { scrollTo: (t: number, o?: object) => void } })
+      .lenis;
     if (lenis) lenis.scrollTo(0, { duration: 1.1 });
     else window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -57,7 +58,15 @@ export function ScrollProgress() {
         }`}
       >
         <svg viewBox="0 0 48 48" className="absolute inset-0 h-full w-full -rotate-90">
-          <circle cx="24" cy="24" r={r} fill="none" stroke="currentColor" strokeWidth="2" opacity="0.15" />
+          <circle
+            cx="24"
+            cy="24"
+            r={r}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            opacity="0.15"
+          />
           <circle
             cx="24"
             cy="24"
@@ -71,7 +80,9 @@ export function ScrollProgress() {
           />
         </svg>
         <span className="label-xs relative leading-none">↑</span>
-        <span className="label-xs absolute -top-6 right-0 hidden text-muted-foreground sm:block">{pct}%</span>
+        <span className="label-xs absolute -top-6 right-0 hidden text-muted-foreground sm:block">
+          {pct}%
+        </span>
       </button>
     </>
   );

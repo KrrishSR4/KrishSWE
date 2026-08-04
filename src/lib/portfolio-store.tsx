@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { DEFAULT_CONTENT, type PortfolioContent } from "./portfolio-data";
 
 const STORAGE_KEY = "portfolio.content.v2";
@@ -63,7 +71,10 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     setContent(DEFAULT_CONTENT);
   }, []);
 
-  const value = useMemo(() => ({ content, hydrated, update, reset }), [content, hydrated, update, reset]);
+  const value = useMemo(
+    () => ({ content, hydrated, update, reset }),
+    [content, hydrated, update, reset],
+  );
 
   return <PortfolioContext.Provider value={value}>{children}</PortfolioContext.Provider>;
 }

@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
 
 const SECTIONS: Record<string, () => React.ReactElement> = {
   projects: FeaturedProjects,
-  
+
   stack: Skills,
   focus: CurrentFocus,
   github: OpenSource,

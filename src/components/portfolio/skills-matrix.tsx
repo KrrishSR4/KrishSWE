@@ -59,8 +59,12 @@ export function Skills() {
               <div className="grid gap-2 border-b border-border-strong bg-surface px-4 py-4 sm:grid-cols-[auto_1fr] sm:items-baseline sm:gap-5 sm:px-6">
                 <span className="label-xs text-primary">{domain.index}</span>
                 <div>
-                  <h3 className="text-xl font-bold uppercase tracking-tight sm:text-2xl">{domain.title}</h3>
-                  <p className="mt-1.5 text-[0.8rem] leading-relaxed text-muted-foreground">{domain.summary}</p>
+                  <h3 className="text-xl font-bold uppercase tracking-tight sm:text-2xl">
+                    {domain.title}
+                  </h3>
+                  <p className="mt-1.5 text-[0.8rem] leading-relaxed text-muted-foreground">
+                    {domain.summary}
+                  </p>
                 </div>
               </div>
 
@@ -78,7 +82,9 @@ export function Skills() {
                         <span className="label-xs truncate text-foreground">{group.title}</span>
                         <span className="label-xs flex shrink-0 items-center gap-3 text-muted-foreground">
                           <span>{String(group.items.length).padStart(2, "0")}</span>
-                          <span className={`transition-transform ${open ? "rotate-45" : ""}`}>+</span>
+                          <span className={`transition-transform ${open ? "rotate-45" : ""}`}>
+                            +
+                          </span>
                         </span>
                       </button>
 
@@ -122,7 +128,9 @@ export function Skills() {
       {/* Engineering focus areas */}
       <div className="mt-14 border border-border-strong">
         <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border-strong bg-surface px-4 py-4 sm:px-6">
-          <h3 className="text-lg font-bold uppercase tracking-tight sm:text-xl">Engineering Focus</h3>
+          <h3 className="text-lg font-bold uppercase tracking-tight sm:text-xl">
+            Engineering Focus
+          </h3>
           <span className="label-xs text-muted-foreground">where the work is aimed</span>
         </div>
         <StaggerGroup
@@ -139,7 +147,9 @@ export function Skills() {
               <span className="label-xs text-primary group-hover:text-primary-foreground">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <p className="mt-3 text-[0.95rem] font-bold uppercase leading-snug tracking-tight">{f}</p>
+              <p className="mt-3 text-[0.95rem] font-bold uppercase leading-snug tracking-tight">
+                {f}
+              </p>
             </div>
           ))}
         </StaggerGroup>
@@ -148,10 +158,16 @@ export function Skills() {
       {/* Currently exploring */}
       <div className="mt-8 border border-border-strong bg-surface">
         <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-border px-4 py-4 sm:px-6">
-          <h3 className="text-lg font-bold uppercase tracking-tight sm:text-xl">Currently Exploring</h3>
+          <h3 className="text-lg font-bold uppercase tracking-tight sm:text-xl">
+            Currently Exploring
+          </h3>
           <span className="label-xs text-muted-foreground">2026 — 2027</span>
         </div>
-        <StaggerGroup selector="[data-exp]" stagger={0.03} className="flex flex-wrap gap-2 px-4 py-5 sm:px-6">
+        <StaggerGroup
+          selector="[data-exp]"
+          stagger={0.03}
+          className="flex flex-wrap gap-2 px-4 py-5 sm:px-6"
+        >
           {content.exploring.map((e) => (
             <span
               key={e}

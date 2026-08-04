@@ -38,7 +38,10 @@ function CaseStudiesPage() {
                 Case <span className="text-primary">Studies</span>
               </h1>
             </div>
-            <Link to="/" className="label-xs border border-border-strong px-4 py-3 transition-colors hover:bg-surface-2">
+            <Link
+              to="/"
+              className="label-xs border border-border-strong px-4 py-3 transition-colors hover:bg-surface-2"
+            >
               ← Back to index
             </Link>
           </div>

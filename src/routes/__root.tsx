@@ -1,10 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  Link,
-  createRootRouteWithContext,
-  useRouter,
-} from "@tanstack/react-router";
+import { Outlet, Link, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 import { PortfolioProvider } from "../lib/portfolio-store";
@@ -76,19 +71,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  // Dark mode script logic moved to a hook or effect here if needed, 
+  // Dark mode script logic moved to a hook or effect here if needed,
   // but since it's tailwind dark mode, let's just apply it in useEffect
   useEffect(() => {
     try {
-      let m = localStorage.getItem('portfolio.mode');
-      if (m !== 'light' && m !== 'dark') {
-        m = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      let m = localStorage.getItem("portfolio.mode");
+      if (m !== "light" && m !== "dark") {
+        m = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
       }
       const r = document.documentElement;
-      r.classList.toggle('mode-light', m === 'light');
-      r.classList.toggle('dark', m === 'dark');
+      r.classList.toggle("mode-light", m === "light");
+      r.classList.toggle("dark", m === "dark");
       r.style.colorScheme = m;
-    } catch (e) {}
+    } catch (e) {
+      // ignore
+    }
   }, []);
 
   return (
