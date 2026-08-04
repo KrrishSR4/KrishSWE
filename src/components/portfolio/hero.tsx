@@ -12,7 +12,7 @@ const TAPE = [
   "ZERO DOWNTIME",
 ];
 
-const ROTATOR = ["CLOUD", "DEVOPS", "PLATFORM", "RELIABILITY", "FULL-STACK"];
+const ROTATOR = ["RELIABILITY", "SCALABILITY", "AVAILABILITY", "OBSERVABILITY", "MAINTAINABILITY", "STABILITY"];
 
 const LEDGER = [
   { k: "BOOT", t: "Environment provisioned", v: "terraform apply" },
