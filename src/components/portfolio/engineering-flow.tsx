@@ -13,6 +13,75 @@ const FLOW_DATA = [
   { id: "MONITOR", children: ["Metrics", "Logs", "Traces"] },
 ];
 
+function MobileTimeline() {
+  return (
+    <div className="relative w-full py-8 md:hidden mt-8">
+      {/* Central Spine */}
+      <div className="absolute left-[50%] top-0 bottom-0 w-[3px] -ml-[1.5px] bg-border-strong z-0">
+        <div className="absolute inset-0 march-v opacity-90"></div>
+      </div>
+
+      <div className="flex flex-col w-full">
+        {FLOW_DATA.map((node, index) => {
+          const isLeft = index % 2 === 0;
+
+          return (
+            <div key={node.id} className={`w-full flex ${isLeft ? "justify-start" : "justify-end"} mb-12`}>
+              {/* Half-width container for the node */}
+              <div className={`w-1/2 relative flex ${isLeft ? "justify-end pr-4 sm:pr-8" : "justify-start pl-4 sm:pl-8"}`}>
+                
+                {/* Horizontal Connector to Central Spine */}
+                <div className={`absolute top-[18px] w-4 sm:w-8 h-[3px] bg-border-strong z-0 ${isLeft ? "right-0" : "left-0"}`}>
+                  <div className={`absolute inset-0 opacity-90 ${isLeft ? "march-h-reverse" : "march-h"}`}></div>
+                </div>
+
+                {/* Node Box and Children */}
+                <div className={`relative z-10 flex flex-col ${isLeft ? "items-end" : "items-start"}`}>
+                  
+                  {/* Root Box */}
+                  <div className="flow-node z-10 relative inline-block border-2 border-border-strong bg-surface px-4 py-2 text-xs font-bold uppercase tracking-wider text-foreground min-w-[120px] text-center transition-all duration-300 group-hover:border-primary group-hover:bg-foreground group-hover:text-background">
+                    {node.id}
+                  </div>
+
+                  {/* Children Container */}
+                  <div className={`mt-2.5 relative flex flex-col ${isLeft ? "items-end mr-4" : "items-start ml-4"}`}>
+                    {/* Vertical Connector down to children */}
+                    <div className={`absolute -top-2.5 w-[3px] h-2.5 bg-border-strong z-0 ${isLeft ? "right-0" : "left-0"}`}>
+                      <div className="absolute inset-0 march-v opacity-30"></div>
+                    </div>
+
+                    {node.children.map((child, childIdx) => {
+                      const isLastChild = childIdx === node.children.length - 1;
+                      return (
+                        <div key={child} className={`relative flex items-center mb-2 group/child ${isLeft ? "flex-row-reverse" : "flex-row"}`}>
+                          {/* Vertical Trunk segment for child */}
+                          <div className={`absolute top-0 w-[3px] bg-border-strong z-0 ${isLastChild ? "h-[50%]" : "h-[calc(100%+0.5rem)]"} ${isLeft ? "right-0" : "left-0"}`}>
+                            <div className="absolute inset-0 march-v opacity-30 group-hover/child:opacity-100 transition-opacity"></div>
+                          </div>
+                          
+                          {/* Horizontal Connector to child */}
+                          <div className="w-4 h-[3px] bg-border-strong z-0 relative shrink-0">
+                            <div className={`absolute inset-0 opacity-30 group-hover/child:opacity-100 transition-opacity ${isLeft ? "march-h-reverse" : "march-h"}`}></div>
+                          </div>
+
+                          {/* Child Box */}
+                          <div className="flow-node z-10 relative inline-block px-3 py-1.5 text-[11px] font-semibold tracking-wide text-muted-foreground border-2 border-border-strong bg-surface-2 whitespace-nowrap min-w-[120px] text-center transition-all duration-300 group-hover/child:border-primary group-hover/child:text-foreground group-hover/child:bg-surface">
+                            {child}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 function FlowNodeTree({
   node,
   isLastInColumn,
@@ -159,6 +228,11 @@ export function EngineeringFlow() {
           background-size: 32px 100%;
           animation: march-x 0.4s linear infinite;
         }
+        .march-h-reverse {
+          background: linear-gradient(90deg, var(--color-primary) 50%, transparent 50%);
+          background-size: 32px 100%;
+          animation: march-x-reverse 0.4s linear infinite;
+        }
         .march-v {
           background: linear-gradient(180deg, var(--color-primary) 50%, transparent 50%);
           background-size: 100% 32px;
@@ -167,6 +241,10 @@ export function EngineeringFlow() {
         @keyframes march-x {
           from { background-position: 0 0; }
           to { background-position: -32px 0; }
+        }
+        @keyframes march-x-reverse {
+          from { background-position: 0 0; }
+          to { background-position: 32px 0; }
         }
         @keyframes march-y {
           from { background-position: 0 0; }
@@ -220,12 +298,8 @@ export function EngineeringFlow() {
               )}
             </div>
 
-            {/* sm: 1 column (Mobile zig-zag) */}
-            <div className="grid md:hidden grid-cols-1 gap-6">
-              {[[0, 1, 2, 3, 4, 5, 6, 7]].map((indices, colIndex) =>
-                renderColumn(indices, colIndex, 1, ""),
-              )}
-            </div>
+            {/* sm: 1 column (Mobile Central Spine) */}
+            <MobileTimeline />
           </div>
         </div>
       </div>
