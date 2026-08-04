@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Hero } from "@/components/portfolio/hero";
+import { EngineeringFlow } from "@/components/portfolio/engineering-flow";
 import { SiteNav } from "@/components/portfolio/site-nav";
 import { FeaturedProjects } from "@/components/portfolio/featured-projects";
 import { CurrentFocus } from "@/components/portfolio/stack-focus";
@@ -49,6 +50,7 @@ function Index() {
           {content.identity.name} — {content.identity.role}
         </h1>
         <Hero />
+        <EngineeringFlow />
         {content.settings.sectionOrder.map((key) => {
           const Section = SECTIONS[key];
           return Section ? <Section key={key} /> : null;
