@@ -16,10 +16,14 @@ const FLOW_DATA = [
 function FlowNodeTree({
   node,
   isLastInColumn,
+  isIndented,
 }: {
-  node: (typeof FLOW_DATA)[0];
-  isLastInColumn?: boolean;
+  node: typeof FLOW_DATA[0];
+  isLastInColumn: boolean;
+  isIndented?: boolean;
 }) {
+  const connectorWidth = isIndented ? "w-12 sm:w-24 lg:w-16 xl:w-24" : "w-5";
+
   return (
     <div className="relative mb-6 group">
       {/* Trunk Vertical Segment for this node */}
@@ -31,7 +35,7 @@ function FlowNodeTree({
 
       <div className="flex items-start">
         {/* Horizontal Left Connector */}
-        <div className="w-5 h-[3px] bg-border-strong z-0 mt-[18px] relative shrink-0">
+        <div className={`${connectorWidth} h-[3px] bg-border-strong z-0 mt-[18px] relative shrink-0 transition-all duration-300`}>
           <div className="absolute inset-0 march-h opacity-90"></div>
         </div>
 
@@ -123,10 +127,21 @@ export function EngineeringFlow() {
         <div className="absolute inset-0 march-v opacity-90"></div>
       </div>
 
-      <div className="w-full pt-6">
-        {indices.map((i, idx) => (
-          <FlowNodeTree key={i} node={FLOW_DATA[i]} isLastInColumn={idx === indices.length - 1} />
-        ))}
+      <div className="pt-6">
+        {indices.map((dataIndex, idx) => {
+          const node = FLOW_DATA[dataIndex];
+          const isLastInColumn = idx === indices.length - 1;
+          const isIndented = dataIndex % 2 !== 0;
+
+          return (
+            <FlowNodeTree
+              key={node.id}
+              node={node}
+              isLastInColumn={isLastInColumn}
+              isIndented={isIndented}
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -183,26 +198,29 @@ export function EngineeringFlow() {
           </div>
 
           <div className="ml-[14px] relative">
-            {/* lg/xl: 8 columns (Fully horizontal for desktop) */}
-            <div className="hidden lg:grid grid-cols-8 gap-4 min-w-max">
-              {[[0], [1], [2], [3], [4], [5], [6], [7]].map((indices, colIndex) =>
-                renderColumn(indices, colIndex, 8, "w-[calc(100%+1rem)]"),
-              )}
-            </div>
-
-            {/* md: 4 columns (Tablet) */}
-            <div className="hidden md:grid lg:hidden grid-cols-4 gap-6">
+            {/* lg: 4 columns (Staggered desktop) */}
+            <div className="hidden lg:grid grid-cols-4 gap-4 xl:gap-8 min-w-max">
               {[
                 [0, 1],
                 [2, 3],
                 [4, 5],
                 [6, 7],
               ].map((indices, colIndex) =>
-                renderColumn(indices, colIndex, 4, "w-[calc(100%+1.5rem)]"),
+                renderColumn(indices, colIndex, 4, "w-[calc(100%+1rem)] xl:w-[calc(100%+2rem)]"),
               )}
             </div>
 
-            {/* sm: 1 column (Mobile) */}
+            {/* md: 2 columns (Tablet) */}
+            <div className="hidden md:grid lg:hidden grid-cols-2 gap-6 min-w-max">
+              {[
+                [0, 1, 2, 3],
+                [4, 5, 6, 7],
+              ].map((indices, colIndex) =>
+                renderColumn(indices, colIndex, 2, "w-[calc(100%+1.5rem)]"),
+              )}
+            </div>
+
+            {/* sm: 1 column (Mobile zig-zag) */}
             <div className="grid md:hidden grid-cols-1 gap-6">
               {[[0, 1, 2, 3, 4, 5, 6, 7]].map((indices, colIndex) =>
                 renderColumn(indices, colIndex, 1, ""),
