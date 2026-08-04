@@ -172,8 +172,7 @@ export function Hero() {
       <div className="relative border-b-2 border-border-strong">
         <div
           aria-hidden
-          className="select-none px-4 py-2 text-center text-[11vw] font-black uppercase leading-[0.85] tracking-tighter text-transparent opacity-[0.5]"
-          style={{ WebkitTextStroke: "1px var(--color-border-strong)" }}
+          className="select-none px-4 py-2 text-center text-[11vw] font-black uppercase leading-[0.85] tracking-tighter text-transparent opacity-50 dark:opacity-100 [-webkit-text-stroke:1px_var(--color-border-strong)] dark:[-webkit-text-stroke:1px_rgba(255,255,255,0.85)]"
         >
           {name}
         </div>
