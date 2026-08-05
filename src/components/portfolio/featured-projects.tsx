@@ -51,7 +51,7 @@ function ProjectCard({ project, i }: { project: Project; i: number }) {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         num,
-        { xPercent: alt ? 12 : -12 },
+        { xPercent: -12 },
         {
           xPercent: 0,
           ease: "none",
@@ -72,10 +72,9 @@ function ProjectCard({ project, i }: { project: Project; i: number }) {
         {/* top rail */}
         <div className="flex items-stretch justify-between border-b-2 border-border-strong bg-surface">
           <div className="flex min-w-0 items-center gap-3 px-3 py-2 sm:gap-4 sm:px-4">
-            <span className="label-xs bg-primary px-2 py-1 text-primary-foreground">
-              PRJ_{project.index}
+            <span className="font-mono text-xs sm:text-sm bg-primary px-3 py-1.5 text-primary-foreground uppercase font-black tracking-wider">
+              PROJECT_{parseInt(project.index, 10)}
             </span>
-            <span className="label-xs truncate text-muted-foreground">{project.id}.system</span>
           </div>
           <div className="hidden flex-1 self-stretch bg-[repeating-linear-gradient(45deg,transparent,transparent_6px,currentColor_6px,currentColor_7px)] text-border-strong sm:block" />
           <div className="flex items-center gap-3 border-l-2 border-border-strong px-3 py-2 sm:px-4">
