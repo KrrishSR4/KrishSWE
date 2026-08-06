@@ -178,29 +178,8 @@ export function EngineeringFlow() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.set(".flow-node", { opacity: 1, y: 0 });
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".flow-node",
-        { opacity: 0, x: -10 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.6,
-          stagger: 0.05,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 75%",
-          },
-        },
-      );
-    }, containerRef);
-    return () => ctx.revert();
+    // Animation removed to improve performance
+    gsap.set(".flow-node", { opacity: 1, x: 0, y: 0 });
   }, []);
 
   const renderColumn = (
