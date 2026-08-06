@@ -75,27 +75,110 @@ function Equalizer() {
   );
 }
 
+function HeroLedger() {
+  const barRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const listRef = useRef<HTMLOListElement>(null);
+
+  useEffect(() => {
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - window.innerHeight;
+        const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        
+        if (barRef.current) {
+          barRef.current.style.width = `${p * 100}%`;
+        }
+        if (textRef.current) {
+          textRef.current.innerText = `${String(Math.round(p * 100)).padStart(3, "0")}%`;
+        }
+        if (listRef.current) {
+          Array.from(listRef.current.children).forEach((li, i) => {
+            const done = p >= (i + 1) / LEDGER.length;
+            const active = !done && p >= i / LEDGER.length;
+            
+            if (active) {
+              li.className = "flex items-center gap-3 px-4 py-3 transition-colors duration-300 bg-primary text-primary-foreground";
+            } else if (done) {
+              li.className = "flex items-center gap-3 px-4 py-3 transition-colors duration-300 bg-surface-2";
+            } else {
+              li.className = "flex items-center gap-3 px-4 py-3 transition-colors duration-300 ";
+            }
+            
+            const dot = li.children[0] as HTMLElement;
+            if (active) {
+              dot.className = "inline-block h-2 w-2 shrink-0 animate-pulse bg-primary-foreground";
+            } else if (done) {
+              dot.className = "inline-block h-2 w-2 shrink-0 bg-signal";
+            } else {
+              dot.className = "inline-block h-2 w-2 shrink-0 bg-border-strong";
+            }
+            
+            const textRight = li.children[3] as HTMLElement;
+            if (active) {
+              textRight.className = "label-xs hidden shrink-0 tabular-nums sm:block ";
+            } else {
+              textRight.className = "label-xs hidden shrink-0 tabular-nums sm:block text-muted-foreground";
+            }
+          });
+        }
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  return (
+    <div data-intro="panel" className="border-b-2 border-border-strong">
+      <div className="flex items-center justify-between border-b-2 border-border-strong px-4 py-3">
+        <span className="label-xs text-muted-foreground">Systems ledger</span>
+        <span ref={textRef} className="label-xs tabular-nums text-primary">
+          000%
+        </span>
+      </div>
+      <div className="h-1 w-full bg-surface-2">
+        <div
+          ref={barRef}
+          className="h-full bg-primary transition-[width] duration-150"
+          style={{ width: `0%` }}
+        />
+      </div>
+      <ol ref={listRef} className="divide-y-2 divide-border-strong">
+        {LEDGER.map((s) => (
+          <li
+            key={s.k}
+            className="flex items-center gap-3 px-4 py-3 transition-colors duration-300"
+          >
+            <span className="inline-block h-2 w-2 shrink-0 bg-border-strong" />
+            <span className="label-xs w-14 shrink-0 tabular-nums">{s.k}</span>
+            <span className="min-w-0 flex-1 truncate text-[0.78rem] font-semibold uppercase tracking-wide">
+              {s.t}
+            </span>
+            <span className="label-xs hidden shrink-0 tabular-nums sm:block text-muted-foreground">
+              {s.v}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
 export function Hero() {
   const { content } = usePortfolio();
   const { identity, contact, projects } = content;
   const root = useRef<HTMLElement>(null);
   const [rot, setRot] = useState(0);
   const [clock, setClock] = useState("--:--:--");
-  const [scrollPct, setScrollPct] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollPct(max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
 
   useEffect(() => {
     const id = setInterval(() => setRot((r) => (r + 1) % ROTATOR.length), 1800);
@@ -363,55 +446,7 @@ export function Hero() {
             </div>
 
             {/* scroll-synced systems ledger */}
-            <div data-intro="panel" className="border-b-2 border-border-strong">
-              <div className="flex items-center justify-between border-b-2 border-border-strong px-4 py-3">
-                <span className="label-xs text-muted-foreground">Systems ledger</span>
-                <span className="label-xs tabular-nums text-primary">
-                  {String(Math.round(scrollPct * 100)).padStart(3, "0")}%
-                </span>
-              </div>
-              <div className="h-1 w-full bg-surface-2">
-                <div
-                  className="h-full bg-primary transition-[width] duration-150"
-                  style={{ width: `${scrollPct * 100}%` }}
-                />
-              </div>
-              <ol className="divide-y-2 divide-border-strong">
-                {LEDGER.map((s, i) => {
-                  const done = scrollPct >= (i + 1) / LEDGER.length;
-                  const active = !done && scrollPct >= i / LEDGER.length;
-                  return (
-                    <li
-                      key={s.k}
-                      className={`flex items-center gap-3 px-4 py-3 transition-colors duration-300 ${
-                        active ? "bg-primary text-primary-foreground" : done ? "bg-surface-2" : ""
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-2 w-2 shrink-0 ${
-                          active
-                            ? "animate-pulse bg-primary-foreground"
-                            : done
-                              ? "bg-signal"
-                              : "bg-border-strong"
-                        }`}
-                      />
-                      <span className="label-xs w-14 shrink-0 tabular-nums">{s.k}</span>
-                      <span className="min-w-0 flex-1 truncate text-[0.78rem] font-semibold uppercase tracking-wide">
-                        {s.t}
-                      </span>
-                      <span
-                        className={`label-xs hidden shrink-0 tabular-nums sm:block ${
-                          active ? "" : "text-muted-foreground"
-                        }`}
-                      >
-                        {s.v}
-                      </span>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
+            <HeroLedger />
 
             {/* live systems counter */}
             <div
