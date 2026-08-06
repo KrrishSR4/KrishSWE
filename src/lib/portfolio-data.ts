@@ -306,15 +306,6 @@ export const DEFAULT_CONTENT: PortfolioContent = {
     },
     {
       id: "cert-04",
-      title: "GDG on Campus Solution Challenge",
-      issuer: "Google Developer Groups (GDG) on Campus (Powered by Hack2Skill)",
-      date: "December 2025",
-      fileUrl: "/certificates/2025H2S01GSC-P50429.pdf",
-      thumbUrl: "/certificates/GDG on Campus Solution.png",
-      skills: "Solution Design, Problem Solving, Innovation, Team Collaboration",
-    },
-    {
-      id: "cert-05",
       title: "Tata Imagination Challenge 2025 (Tata Quiz)",
       issuer: "Tata Group (via Unstop)",
       date: "Jan 2025",
@@ -323,7 +314,7 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       skills: "Aptitude, Problem Solving, Analytical Thinking, Business Awareness",
     },
     {
-      id: "cert-06",
+      id: "cert-05",
       title: "Techfest IIT Bombay – College Ambassador",
       issuer: "Techfest, IIT Bombay",
       date: "15 October 2025",
@@ -332,7 +323,25 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       skills: "Leadership, Event Management, Campus Outreach, Communication",
     },
     {
+      id: "cert-06",
+      title: "GDG on Campus Solution Challenge",
+      issuer: "Google Developer Groups (GDG) on Campus (Powered by Hack2Skill)",
+      date: "December 2025",
+      fileUrl: "/certificates/2025H2S01GSC-P50429.pdf",
+      thumbUrl: "/certificates/GDG on Campus Solution.png",
+      skills: "Solution Design, Problem Solving, Innovation, Team Collaboration",
+    },
+    {
       id: "cert-07",
+      title: "Samsung Solve for Tomorrow 2026",
+      issuer: "Samsung",
+      date: "21 May 2026",
+      fileUrl: "/certificates/SamsungSolveForTommorow.jpeg",
+      thumbUrl: "/certificates/SamsungSolveForTommorow.jpeg",
+      skills: "Design Thinking, Innovation, Problem Solving, Idea Development",
+    },
+    {
+      id: "cert-08",
       title: "Master in Kubernetes (LFS158)",
       issuer: "The Linux Foundation",
       date: "30 July 2026",
@@ -341,7 +350,7 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       skills: "Kubernetes, Container Orchestration, Cluster Management, Cloud-Native Applications",
     },
     {
-      id: "cert-08",
+      id: "cert-09",
       title: "Redis Certified: Associate Software Operator",
       issuer: "Redis",
       date: "30 July 2026",
@@ -350,7 +359,7 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       skills: "Redis, In-Memory Databases, Caching, Data Structures",
     },
     {
-      id: "cert-09",
+      id: "cert-10",
       title: "Graph Developer – Professional",
       issuer: "Apollo GraphQL",
       date: "31 July 2026",
@@ -359,7 +368,7 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       skills: "GraphQL, Apollo Federation, Supergraph Architecture, API Federation",
     },
     {
-      id: "cert-10",
+      id: "cert-11",
       title: "35AWARDS International Photography Award 2026",
       issuer: "35AWARDS",
       date: "1 June 2026",
