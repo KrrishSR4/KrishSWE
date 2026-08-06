@@ -134,7 +134,7 @@ export function Certificates() {
                       <img 
                         src={cert.thumbUrl || cert.fileUrl} 
                         alt={`${cert.title} preview`}
-                        className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500 z-0"
+                        className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 z-0"
                         loading="lazy"
                       />
                     )}
@@ -162,15 +162,29 @@ export function Certificates() {
                     
                     {cert.skills && (
                       <div className="mt-auto pt-4 border-t-2 border-border-strong/50">
-                        <span className="label-xs text-muted-foreground block mb-1">SKILLS:</span>
-                        <p className="text-xs text-foreground/80 line-clamp-2">{cert.skills}</p>
+                        <span className="label-xs text-muted-foreground block mb-2">SKILLS:</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {cert.skills.split(',').map((skill, i) => (
+                            <span key={i} className="bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider">
+                              {skill.trim()}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     )}
 
                     {cert.achievement && (
                       <div className="mt-3 pt-3 border-t-2 border-border-strong/50">
                         <span className="label-xs text-accent block mb-1">ACHIEVEMENT:</span>
-                        <p className="text-xs text-foreground/80 line-clamp-2">{cert.achievement}</p>
+                        <p className="text-xs text-foreground/80 line-clamp-2">
+                          {cert.achievement.split(/(#65)/).map((part, i) => 
+                            part === '#65' ? (
+                              <span key={i} className="text-primary font-bold">{part}</span>
+                            ) : (
+                              part
+                            )
+                          )}
+                        </p>
                       </div>
                     )}
                   </div>

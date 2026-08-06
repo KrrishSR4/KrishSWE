@@ -37,12 +37,12 @@ function CertificatesPage() {
                 <span className="text-primary">Certificates</span>
               </h1>
             </div>
-            <Link
-              to="/"
+            <a
+              href="/"
               className="label-xs border border-border-strong px-4 py-3 transition-colors hover:bg-surface-2"
             >
               ← Back to index
-            </Link>
+            </a>
           </div>
         </div>
         <Certificates />

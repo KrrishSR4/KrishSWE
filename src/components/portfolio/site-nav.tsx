@@ -50,7 +50,6 @@ export function SiteNav() {
           ))}
           <Link
             to="/case-studies"
-            target="_blank"
             className="label-xs text-muted-foreground transition-colors hover:text-foreground"
             activeProps={{ className: "label-xs text-foreground" }}
           >
@@ -58,7 +57,6 @@ export function SiteNav() {
           </Link>
           <Link
             to="/certificates"
-            target="_blank"
             className="label-xs text-muted-foreground transition-colors hover:text-foreground"
             activeProps={{ className: "label-xs text-foreground" }}
           >
@@ -138,7 +136,6 @@ export function SiteNav() {
             ))}
             <Link
               to="/case-studies"
-              target="_blank"
               onClick={() => setIsOpen(false)}
               className={`label-sm text-foreground hover:text-primary border-b border-border py-4 flex items-center justify-between transition-all duration-300 transform ${
                 isOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
@@ -150,7 +147,6 @@ export function SiteNav() {
             </Link>
             <Link
               to="/certificates"
-              target="_blank"
               onClick={() => setIsOpen(false)}
               className={`label-sm text-foreground hover:text-primary border-b border-border py-4 flex items-center justify-between transition-all duration-300 transform ${
                 isOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"

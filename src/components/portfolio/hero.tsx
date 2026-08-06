@@ -288,7 +288,6 @@ export function Hero() {
               </a>
               <Link
                 to="/case-studies"
-                target="_blank"
                 data-intro="cta"
                 className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background sm:border-l-0"
               >
@@ -296,7 +295,6 @@ export function Hero() {
               </Link>
               <Link
                 to="/certificates"
-                target="_blank"
                 data-intro="cta"
                 className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background lg:border-l-0"
               >
