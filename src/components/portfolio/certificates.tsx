@@ -3,6 +3,11 @@ import { usePortfolio } from "@/lib/portfolio-store";
 import { Reveal, SectionHeader } from "./primitives";
 import type { Certificate } from "@/lib/portfolio-data";
 
+function getDriveFileId(url: string) {
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
 function CertificateModal({
   cert,
   onClose,
@@ -122,12 +127,26 @@ export function Certificates() {
                   onClick={() => setActiveCert(cert)}
                 >
                   <div className="relative aspect-[4/3] w-full border-b-2 border-border-strong bg-surface-2 overflow-hidden flex flex-col items-center justify-center p-6">
-                    {/* Abstract placeholder visual */}
-                    <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.02)_10px,rgba(0,0,0,0.02)_11px)] dark:bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_11px)]" />
+                    {getDriveFileId(cert.driveUrl) ? (
+                      <img 
+                        src={`https://drive.google.com/thumbnail?id=${getDriveFileId(cert.driveUrl)}&sz=w800`} 
+                        alt={`${cert.title} preview`}
+                        className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500 mix-blend-luminosity group-hover:mix-blend-normal z-0"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    ) : null}
+
+                    {/* Abstract placeholder visual (fallback) */}
+                    <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.02)_10px,rgba(0,0,0,0.02)_11px)] dark:bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_11px)] z-0" />
                     
-                    <svg className="w-16 h-16 text-muted-foreground mb-4 group-hover:text-primary transition-colors relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                    </svg>
+                    {!getDriveFileId(cert.driveUrl) && (
+                      <svg className="w-16 h-16 text-muted-foreground mb-4 group-hover:text-primary transition-colors relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                      </svg>
+                    )}
                     
                     <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300 z-10" />
                   </div>
