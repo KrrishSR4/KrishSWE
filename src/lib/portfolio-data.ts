@@ -5,7 +5,8 @@ export interface Certificate {
   title: string;
   issuer: string;
   date: string;
-  driveUrl: string;
+  fileUrl: string;
+  thumbUrl?: string;
   skills?: string;
   achievement?: string;
 }
@@ -281,7 +282,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "Become a Full-Stack Web Developer",
       issuer: "LinkedIn Learning",
       date: "28 January 2023",
-      driveUrl: "https://drive.google.com/file/d/1EOMFcuDXZrVQF5T892oDeqFZi29o425D/preview",
+      fileUrl: "/certificates/Krish_FULLSTACK.png",
+      thumbUrl: "/certificates/Krish_FULLSTACK.png",
       skills: "Web Development, Full-Stack Development",
     },
     {
@@ -289,7 +291,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "Space Hackathon 2024",
       issuer: "Hack2skill (Organized by India International Science Festival)",
       date: "27 January 2024",
-      driveUrl: "https://drive.google.com/file/d/1b87XT-qo81sQ65laJA1HrB_2M19TY-mC/preview",
+      fileUrl: "/certificates/H2S_IISF-Krish.png",
+      thumbUrl: "/certificates/H2S_IISF-Krish.png",
       skills: "Problem Solving, Innovation, Teamwork, Space Technology",
     },
     {
@@ -297,7 +300,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "Bharatiya Antariksh Hackathon 2024",
       issuer: "ISRO (Powered by Hack2Skill)",
       date: "OCT 2024",
-      driveUrl: "https://drive.google.com/file/d/1NzsC8jVg2zcG9wxBOvevCHkAoJ6I6Nei/preview",
+      fileUrl: "/certificates/H2S_ISRO-Krish.png",
+      thumbUrl: "/certificates/H2S_ISRO-Krish.png",
       skills: "Space Technology, Problem Solving, Innovation, Team Collaboration",
     },
     {
@@ -305,7 +309,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "GDG on Campus Solution Challenge",
       issuer: "Google Developer Groups (GDG) on Campus (Powered by Hack2Skill)",
       date: "December 2025",
-      driveUrl: "https://drive.google.com/file/d/1RNxZYgjPuoIpdkNSJk3E-OPYW1LovqXp/preview",
+      fileUrl: "/certificates/2025H2S01GSC-P50429.pdf",
+      thumbUrl: "/certificates/GDG on Campus Solution.png",
       skills: "Solution Design, Problem Solving, Innovation, Team Collaboration",
     },
     {
@@ -313,7 +318,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "Tata Imagination Challenge 2025 (Tata Quiz)",
       issuer: "Tata Group (via Unstop)",
       date: "Jan 2025",
-      driveUrl: "https://drive.google.com/file/d/12HaQSHq82wsxB8vCbfYixFbj9zBN86LG/preview",
+      fileUrl: "/certificates/TATA_Imagination_Krish.jpg",
+      thumbUrl: "/certificates/TATA_Imagination_Krish.jpg",
       skills: "Aptitude, Problem Solving, Analytical Thinking, Business Awareness",
     },
     {
@@ -321,7 +327,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "Techfest IIT Bombay – College Ambassador",
       issuer: "Techfest, IIT Bombay",
       date: "15 October 2025",
-      driveUrl: "https://drive.google.com/file/d/1uO-2V8hir9fUpueYNadEVLm6Tbh4J2ld/preview",
+      fileUrl: "/certificates/Certificate_Krish_Mishra.pdf",
+      thumbUrl: "/certificates/Techfest IIT Bombay – College Ambassador.png",
       skills: "Leadership, Event Management, Campus Outreach, Communication",
     },
     {
@@ -329,7 +336,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "Master in Kubernetes (LFS158)",
       issuer: "The Linux Foundation",
       date: "30 July 2026",
-      driveUrl: "https://drive.google.com/file/d/19-Fyb4T2tDjYxBGVbwA8rEYRCDTI1ZU1/preview",
+      fileUrl: "/certificates/Master-In-Kubernetes_Krish.pdf",
+      thumbUrl: "/certificates/Master in Kubernetes (LFS158).png",
       skills: "Kubernetes, Container Orchestration, Cluster Management, Cloud-Native Applications",
     },
     {
@@ -337,7 +345,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "Redis Certified: Associate Software Operator",
       issuer: "Redis",
       date: "30 July 2026",
-      driveUrl: "https://drive.google.com/file/d/15D8Qu8HTuJNzH5pMSB4ickHciQ5_4P-7/preview",
+      fileUrl: "/certificates/ASO-Krish_Redis.pdf",
+      thumbUrl: "/certificates/Redis Certified ASO.png",
       skills: "Redis, In-Memory Databases, Caching, Data Structures",
     },
     {
@@ -345,7 +354,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "Graph Developer – Professional",
       issuer: "Apollo GraphQL",
       date: "31 July 2026",
-      driveUrl: "https://drive.google.com/file/d/16ujaWEH-5dLKwjLui5w1aiJJZDfh3x3p/preview",
+      fileUrl: "/certificates/GraphQL-Krish.pdf",
+      thumbUrl: "/certificates/Graph Developer – Professional.png",
       skills: "GraphQL, Apollo Federation, Supergraph Architecture, API Federation",
     },
     {
@@ -353,7 +363,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       title: "35AWARDS International Photography Award 2026",
       issuer: "35AWARDS",
       date: "1 June 2026",
-      driveUrl: "https://drive.google.com/file/d/1XZX8Q-8mo6OoFZFtOVh51Dr7m7P5VXqx/preview",
+      fileUrl: "/certificates/35awards_cert_910_en.pdf",
+      thumbUrl: "/certificates/35AWARDS International Photography Award 2026.png",
       skills: "Creative Photography, Landscape Photography, Composition, Visual Storytelling",
       achievement: "Ranked #65 in India in the 35AWARDS International Photography Contest for a Green Sky-themed photograph.",
     },

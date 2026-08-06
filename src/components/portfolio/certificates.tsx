@@ -3,9 +3,8 @@ import { usePortfolio } from "@/lib/portfolio-store";
 import { Reveal, SectionHeader } from "./primitives";
 import type { Certificate } from "@/lib/portfolio-data";
 
-function getDriveFileId(url: string) {
-  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  return match ? match[1] : null;
+function isImage(url: string) {
+  return url.match(/\.(jpeg|jpg|png|gif|webp)$/i) != null;
 }
 
 function CertificateModal({
@@ -55,20 +54,23 @@ function CertificateModal({
           </button>
         </div>
 
-        {/* Iframe Container */}
-        <div className="relative flex-1 w-full h-full bg-surface-2 overflow-hidden">
-          {cert.driveUrl ? (
+        {/* Iframe or Image Container */}
+        <div className="relative flex-1 w-full h-full bg-surface-2 overflow-hidden flex items-center justify-center p-2 sm:p-6">
+          {cert.thumbUrl || (cert.fileUrl && isImage(cert.fileUrl)) ? (
+            <img 
+              src={cert.thumbUrl || cert.fileUrl} 
+              alt={cert.title} 
+              className="max-w-full max-h-full object-contain drop-shadow-xl" 
+            />
+          ) : cert.fileUrl ? (
             <iframe 
-              src={cert.driveUrl} 
-              className="absolute inset-0 w-full h-full border-none" 
-              allow="autoplay"
+              src={cert.fileUrl} 
+              className="absolute inset-0 w-full h-full border-none bg-white" 
               title={cert.title}
-            >
-              Loading preview...
-            </iframe>
+            />
           ) : (
             <div className="flex h-full items-center justify-center p-6 text-center">
-              <p className="text-muted-foreground">No preview link available.</p>
+              <p className="text-muted-foreground">No preview file available.</p>
             </div>
           )}
         </div>
@@ -79,12 +81,12 @@ function CertificateModal({
           <span className="label-xs text-muted-foreground hidden sm:block">|</span>
           <span className="label-xs text-muted-foreground">DATE: <span className="text-foreground">{cert.date}</span></span>
           <a 
-            href={cert.driveUrl.replace("/preview", "/view")} 
+            href={cert.fileUrl} 
             target="_blank" 
             rel="noreferrer"
             className="label-xs ml-auto border-2 border-primary bg-primary px-4 py-2 text-primary-foreground hover:bg-transparent hover:text-primary transition-colors"
           >
-            OPEN IN DRIVE ↗
+            OPEN FILE ↗
           </a>
         </div>
       </div>
@@ -127,28 +129,26 @@ export function Certificates() {
                   onClick={() => setActiveCert(cert)}
                 >
                   <div className="relative aspect-[4/3] w-full border-b-2 border-border-strong bg-surface-2 overflow-hidden flex flex-col items-center justify-center p-6">
-                    {getDriveFileId(cert.driveUrl) ? (
+                    {/* Thumbnail Image if applicable */}
+                    {(cert.thumbUrl || isImage(cert.fileUrl)) && (
                       <img 
-                        src={`https://drive.google.com/thumbnail?id=${getDriveFileId(cert.driveUrl)}&sz=w800`} 
+                        src={cert.thumbUrl || cert.fileUrl} 
                         alt={`${cert.title} preview`}
-                        className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500 mix-blend-luminosity group-hover:mix-blend-normal z-0"
+                        className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500 z-0"
                         loading="lazy"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
                       />
-                    ) : null}
+                    )}
 
-                    {/* Abstract placeholder visual (fallback) */}
+                    {/* Abstract placeholder visual */}
                     <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.02)_10px,rgba(0,0,0,0.02)_11px)] dark:bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_11px)] z-0" />
                     
-                    {!getDriveFileId(cert.driveUrl) && (
+                    {!(cert.thumbUrl || isImage(cert.fileUrl)) && (
                       <svg className="w-16 h-16 text-muted-foreground mb-4 group-hover:text-primary transition-colors relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                       </svg>
                     )}
                     
-                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-300 z-10" />
+                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300 z-10" />
                   </div>
                   
                   <div className="flex flex-col flex-1 p-5 sm:p-6">
