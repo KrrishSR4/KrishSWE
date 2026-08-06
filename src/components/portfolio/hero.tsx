@@ -278,7 +278,7 @@ export function Hero() {
               </p>
             </div>
 
-            <div className="mt-10 grid gap-0 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-0 sm:grid-cols-2 lg:grid-cols-5">
               <a
                 href="#projects"
                 data-intro="cta"
@@ -288,22 +288,31 @@ export function Hero() {
               </a>
               <Link
                 to="/case-studies"
+                target="_blank"
                 data-intro="cta"
                 className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background sm:border-l-0"
               >
                 Case studies <span aria-hidden>↗</span>
               </Link>
+              <Link
+                to="/certificates"
+                target="_blank"
+                data-intro="cta"
+                className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background lg:border-l-0"
+              >
+                Certificates <span aria-hidden>↗</span>
+              </Link>
               <a
                 href={contact.resumeUrl}
                 data-intro="cta"
-                className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background lg:border-l-0"
+                className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background sm:border-l-0 lg:border-l-0"
               >
                 Resume <span aria-hidden>↓</span>
               </a>
               <a
                 href="#contact"
                 data-intro="cta"
-                className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background sm:border-l-0"
+                className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background lg:border-l-0"
               >
                 Contact <span aria-hidden>→</span>
               </a>

@@ -1,5 +1,13 @@
 export type ProjectStatus = "Production" | "In Development" | "Maintained" | "Archived";
 
+export interface Certificate {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  driveUrl: string;
+}
+
 export interface Project {
   id: string;
   index: string;
@@ -81,6 +89,7 @@ export interface PortfolioContent {
   identity: Identity;
   contact: Contact;
   projects: Project[];
+  certificates: Certificate[];
   capabilities: CapabilityDomain[];
   focusAreas: string[];
   exploring: string[];
@@ -263,6 +272,22 @@ export const DEFAULT_CONTENT: PortfolioContent = {
         { label: "Status", value: "Building" },
       ],
     },
+  ],
+  certificates: [
+    {
+      id: "cert-01",
+      title: "AWS Certified Solutions Architect",
+      issuer: "Amazon Web Services",
+      date: "2024",
+      driveUrl: "https://drive.google.com/file/d/YOUR_DRIVE_FILE_ID_HERE/preview",
+    },
+    {
+      id: "cert-02",
+      title: "Google Cloud Professional DevOps",
+      issuer: "Google Cloud",
+      date: "2025",
+      driveUrl: "https://drive.google.com/file/d/YOUR_DRIVE_FILE_ID_HERE/preview",
+    }
   ],
   capabilities: [
     {

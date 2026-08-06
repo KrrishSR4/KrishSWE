@@ -50,10 +50,19 @@ export function SiteNav() {
           ))}
           <Link
             to="/case-studies"
+            target="_blank"
             className="label-xs text-muted-foreground transition-colors hover:text-foreground"
             activeProps={{ className: "label-xs text-foreground" }}
           >
             Case Studies
+          </Link>
+          <Link
+            to="/certificates"
+            target="_blank"
+            className="label-xs text-muted-foreground transition-colors hover:text-foreground"
+            activeProps={{ className: "label-xs text-foreground" }}
+          >
+            Certificates
           </Link>
         </nav>
         <div className="ml-auto flex shrink-0 items-center gap-2">
@@ -129,6 +138,7 @@ export function SiteNav() {
             ))}
             <Link
               to="/case-studies"
+              target="_blank"
               onClick={() => setIsOpen(false)}
               className={`label-sm text-foreground hover:text-primary border-b border-border py-4 flex items-center justify-between transition-all duration-300 transform ${
                 isOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
@@ -137,6 +147,18 @@ export function SiteNav() {
             >
               <span className="font-bold tracking-wider">Case Studies</span>
               <span className="text-[10px] text-muted-foreground font-mono">0{NAV.length + 1}</span>
+            </Link>
+            <Link
+              to="/certificates"
+              target="_blank"
+              onClick={() => setIsOpen(false)}
+              className={`label-sm text-foreground hover:text-primary border-b border-border py-4 flex items-center justify-between transition-all duration-300 transform ${
+                isOpen ? "translate-x-0 opacity-100" : "-translate-x-4 opacity-0"
+              }`}
+              style={{ transitionDelay: `${(NAV.length + 1) * 40}ms` }}
+            >
+              <span className="font-bold tracking-wider">Certificates</span>
+              <span className="text-[10px] text-muted-foreground font-mono">0{NAV.length + 2}</span>
             </Link>
           </nav>
 
