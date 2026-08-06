@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import { PortfolioProvider } from "../lib/portfolio-store";
 import { ScrollProgress } from "../components/portfolio/scroll-progress";
+import TargetCursor from "../components/ui/TargetCursor";
 
 function NotFoundComponent() {
   return (
@@ -91,6 +92,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <PortfolioProvider>
+        <TargetCursor />
         <Outlet />
         <ScrollProgress />
       </PortfolioProvider>
