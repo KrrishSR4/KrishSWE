@@ -1,26 +1,10 @@
-import { useState } from "react";
 import { usePortfolio } from "@/lib/portfolio-store";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Reveal, SectionHeader, StaggerGroup } from "./primitives";
 
-function CoreMark({ core }: { core?: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={`mt-[0.35rem] block h-2 w-2 shrink-0 border ${
-        core ? "border-primary bg-primary" : "border-border-strong bg-transparent"
-      }`}
-    />
-  );
-}
-
 export function Skills() {
   const { content } = usePortfolio();
   const isMobile = useIsMobile();
-  const [toggled, setToggled] = useState<Record<string, boolean>>({});
-
-  const isOpen = (id: string) => (isMobile ? toggled[id] === true : toggled[id] !== false);
-  const toggle = (id: string) => setToggled((p) => ({ ...p, [id]: !isOpen(id) }));
 
   const coreCount = content.capabilities.reduce(
     (n, d) => n + d.groups.reduce((m, g) => m + g.items.filter((i) => i.core).length, 0),
@@ -36,20 +20,7 @@ export function Skills() {
         meta={`${content.capabilities.length} domains · ${coreCount} core`}
       />
 
-      {/* Legend */}
-      <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border border-border bg-surface px-4 py-3">
-        <span className="label-xs flex items-center gap-2">
-          <span className="block h-2 w-2 border border-primary bg-primary" />
-          <span className="text-foreground">Core expertise</span>
-        </span>
-        <span className="label-xs flex items-center gap-2">
-          <span className="block h-2 w-2 border border-border-strong" />
-          <span className="text-muted-foreground">Working knowledge</span>
-        </span>
-        <span className="label-xs ml-auto hidden text-muted-foreground sm:block">
-          no ratings · no meters · shipped usage only
-        </span>
-      </div>
+
 
       {/* Domains */}
       <div className="mt-8 space-y-8">
@@ -70,52 +41,38 @@ export function Skills() {
 
               <div className="divide-y divide-border">
                 {domain.groups.map((group) => {
-                  const open = isOpen(group.id);
                   return (
-                    <div key={group.id}>
-                      <button
-                        type="button"
-                        onClick={() => toggle(group.id)}
-                        aria-expanded={open}
-                        className="grid w-full grid-cols-[1fr_auto] items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-surface sm:px-6"
-                      >
-                        <span className="label-xs truncate text-foreground">{group.title}</span>
-                        <span className="label-xs flex shrink-0 items-center gap-3 text-muted-foreground">
-                          <span>{String(group.items.length).padStart(2, "0")}</span>
-                          <span className={`transition-transform ${open ? "rotate-45" : ""}`}>
-                            +
-                          </span>
+                    <div key={group.id} className="border-t border-border-strong first:border-t-0">
+                      <div className="flex items-center justify-between bg-surface/30 px-4 py-3 sm:px-6">
+                        <span className="label-xs text-muted-foreground">{group.title}</span>
+                        <span className="label-xs text-muted-foreground opacity-50">
+                          {String(group.items.length).padStart(2, "0")}
                         </span>
-                      </button>
-
-                      {open ? (
-                        <StaggerGroup
-                          selector="[data-cap]"
-                          stagger={0.03}
-                          className="grid gap-px border-t border-border bg-border sm:grid-cols-2 xl:grid-cols-3"
-                        >
-                          {group.items.map((item) => (
-                            <div
-                              key={item.name}
-                              data-cap
-                              className={`flex items-start gap-3 bg-background px-4 py-3 transition-colors hover:bg-surface sm:px-6 ${
-                                item.core ? "" : "opacity-90"
-                              }`}
-                            >
-                              <CoreMark core={item.core} />
-                              <span
-                                className={
-                                  item.core
-                                    ? "text-[0.95rem] font-bold leading-snug tracking-tight text-foreground"
-                                    : "text-[0.82rem] leading-snug text-muted-foreground"
-                                }
-                              >
-                                {item.name}
-                              </span>
-                            </div>
-                          ))}
-                        </StaggerGroup>
-                      ) : null}
+                      </div>
+                      <StaggerGroup
+                        selector="[data-cap]"
+                        stagger={0.03}
+                        className="grid gap-px border-t border-border bg-border sm:grid-cols-2 xl:grid-cols-3"
+                      >
+                        {group.items.map((item) => (
+                          <div
+                            key={item.name}
+                            data-cap
+                            className={`flex items-center gap-3 bg-background px-4 py-3 transition-colors hover:bg-surface sm:px-6`}
+                          >
+                            {item.icon && (
+                              <img
+                                src={item.icon}
+                                alt={item.name}
+                                className={`h-5 w-5 object-contain shrink-0 ${item.className || ""}`}
+                              />
+                            )}
+                            <span className="text-[0.95rem] leading-snug tracking-tight text-foreground">
+                              {item.name}
+                            </span>
+                          </div>
+                        ))}
+                      </StaggerGroup>
                     </div>
                   );
                 })}

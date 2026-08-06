@@ -9,7 +9,7 @@ import {
 } from "react";
 import { DEFAULT_CONTENT, type PortfolioContent } from "./portfolio-data";
 
-const STORAGE_KEY = "portfolio.content.v2";
+const STORAGE_KEY = "portfolio.content.v6";
 
 function merge(stored: unknown): PortfolioContent {
   if (!stored || typeof stored !== "object") return DEFAULT_CONTENT;
