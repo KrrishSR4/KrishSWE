@@ -137,16 +137,23 @@ export function Certificates() {
                     <h3 className="text-xl font-bold uppercase leading-tight tracking-tighter mb-2">
                       {cert.title}
                     </h3>
-                    <p className="text-sm font-semibold uppercase text-muted-foreground">
+                    <p className="text-sm font-semibold uppercase text-muted-foreground mb-4">
                       {cert.issuer}
                     </p>
                     
-                    <div className="mt-auto pt-6 flex justify-between items-center">
-                      <span className="label-xs text-muted-foreground group-hover:text-primary transition-colors">
-                        VIEW CREDENTIAL
-                      </span>
-                      <span className="text-primary transition-transform group-hover:translate-x-1" aria-hidden>→</span>
-                    </div>
+                    {cert.skills && (
+                      <div className="mt-auto pt-4 border-t-2 border-border-strong/50">
+                        <span className="label-xs text-muted-foreground block mb-1">SKILLS:</span>
+                        <p className="text-xs text-foreground/80 line-clamp-2">{cert.skills}</p>
+                      </div>
+                    )}
+
+                    {cert.achievement && (
+                      <div className="mt-3 pt-3 border-t-2 border-border-strong/50">
+                        <span className="label-xs text-accent block mb-1">ACHIEVEMENT:</span>
+                        <p className="text-xs text-foreground/80 line-clamp-2">{cert.achievement}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </Reveal>
