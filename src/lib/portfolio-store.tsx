@@ -23,6 +23,7 @@ function merge(stored: unknown): PortfolioContent {
     exploring: s.exploring ?? DEFAULT_CONTENT.exploring,
     focus: s.focus ?? DEFAULT_CONTENT.focus,
     repos: s.repos ?? DEFAULT_CONTENT.repos,
+    certificates: s.certificates ?? DEFAULT_CONTENT.certificates,
     settings: { ...DEFAULT_CONTENT.settings, ...(s.settings ?? {}) },
   };
 }

@@ -8,16 +8,22 @@ export default defineConfig({
   plugins: [TanStackRouterVite(), react(), tailwindcss()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom"],
-          router: ["@tanstack/react-router", "@tanstack/react-query"],
-          gsap: ["gsap"],
+        manualChunks(id) {
+          if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/")) {
+            return "vendor";
+          }
+          if (id.includes("node_modules/@tanstack/react-router/") || id.includes("node_modules/@tanstack/react-query/")) {
+            return "router";
+          }
+          if (id.includes("node_modules/gsap/")) {
+            return "gsap";
+          }
         },
       },
     },
