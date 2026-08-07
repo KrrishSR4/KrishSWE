@@ -289,6 +289,15 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       skills: "Web Development, Full-Stack Development",
     },
     {
+      id: "cert-12",
+      title: "Docker Foundations Professional Certificate",
+      issuer: "LinkedIn Learning & Docker",
+      date: "17 September 2023",
+      fileUrl: "/certificates/docker.png",
+      thumbUrl: "/certificates/docker.png",
+      skills: "Containerization, Docker Engine, Dockerfile, Docker Compose",
+    },
+    {
       id: "cert-02",
       title: "Space Hackathon 2024",
       issuer: "Hack2skill (Organized by India International Science Festival)",
@@ -377,7 +386,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       fileUrl: "/certificates/35awards_cert_910_en.pdf",
       thumbUrl: "/certificates/35AWARDS International Photography Award 2026.png",
       skills: "Creative Photography, Landscape Photography, Composition, Visual Storytelling",
-      achievement: "Ranked #65 in India in the 35AWARDS International Photography Contest for a Green Sky-themed photograph.",
+      achievement:
+        "Ranked #65 in India in the 35AWARDS International Photography Contest for a Green Sky-themed photograph.",
     },
   ],
   capabilities: [
@@ -393,7 +403,12 @@ export const DEFAULT_CONTENT: PortfolioContent = {
           items: [
             { name: "JavaScript", core: true, icon: "https://skillicons.dev/icons?i=js" },
             { name: "TypeScript", core: true, icon: "https://skillicons.dev/icons?i=ts" },
-            { name: "Go", core: true, icon: "/skills/golang.png", className: "scale-[2.6] mr-4 ml-2" },
+            {
+              name: "Go",
+              core: true,
+              icon: "/skills/golang.png",
+              className: "scale-[2.6] mr-4 ml-2",
+            },
           ],
         },
         {
@@ -453,12 +468,20 @@ export const DEFAULT_CONTENT: PortfolioContent = {
           id: "devops",
           title: "DevOps Engineering",
           items: [
-            { name: "GitHub Actions", core: true, icon: "https://skillicons.dev/icons?i=githubactions" },
+            {
+              name: "GitHub Actions",
+              core: true,
+              icon: "https://skillicons.dev/icons?i=githubactions",
+            },
             { name: "Docker", core: true, icon: "https://skillicons.dev/icons?i=docker" },
             { name: "Kubernetes", core: true, icon: "https://skillicons.dev/icons?i=kubernetes" },
             { name: "Jenkins", core: true, icon: "https://skillicons.dev/icons?i=jenkins" },
             { name: "Nginx", icon: "https://skillicons.dev/icons?i=nginx" },
-            { name: "Argo CD", icon: "https://raw.githubusercontent.com/cncf/artwork/main/projects/argo/icon/color/argo-icon-color.svg", className: "bg-black/90 dark:bg-transparent rounded-sm p-[2px]" },
+            {
+              name: "Argo CD",
+              icon: "https://raw.githubusercontent.com/cncf/artwork/main/projects/argo/icon/color/argo-icon-color.svg",
+              className: "bg-black/90 dark:bg-transparent rounded-sm p-[2px]",
+            },
           ],
         },
         {
@@ -473,9 +496,20 @@ export const DEFAULT_CONTENT: PortfolioContent = {
           id: "cloud",
           title: "Cloud Platforms",
           items: [
-            { name: "Amazon Web Services (AWS)", core: true, icon: "https://skillicons.dev/icons?i=aws" },
-            { name: "Google Cloud Platform (GCP)", core: true, icon: "https://skillicons.dev/icons?i=gcp" },
-            { name: "Oracle Cloud Infrastructure (OCI)", icon: "https://www.vectorlogo.zone/logos/oracle/oracle-icon.svg" },
+            {
+              name: "Amazon Web Services (AWS)",
+              core: true,
+              icon: "https://skillicons.dev/icons?i=aws",
+            },
+            {
+              name: "Google Cloud Platform (GCP)",
+              core: true,
+              icon: "https://skillicons.dev/icons?i=gcp",
+            },
+            {
+              name: "Oracle Cloud Infrastructure (OCI)",
+              icon: "https://www.vectorlogo.zone/logos/oracle/oracle-icon.svg",
+            },
           ],
         },
       ],
@@ -492,7 +526,11 @@ export const DEFAULT_CONTENT: PortfolioContent = {
           items: [
             { name: "Prometheus", core: true, icon: "https://skillicons.dev/icons?i=prometheus" },
             { name: "Grafana", core: true, icon: "https://skillicons.dev/icons?i=grafana" },
-            { name: "OpenTelemetry", core: true, icon: "https://raw.githubusercontent.com/cncf/artwork/main/projects/opentelemetry/icon/color/opentelemetry-icon-color.svg" },
+            {
+              name: "OpenTelemetry",
+              core: true,
+              icon: "https://raw.githubusercontent.com/cncf/artwork/main/projects/opentelemetry/icon/color/opentelemetry-icon-color.svg",
+            },
             { name: "Datadog", icon: "https://cdn.simpleicons.org/datadog" },
           ],
         },
@@ -501,10 +539,21 @@ export const DEFAULT_CONTENT: PortfolioContent = {
           title: "DevSecOps",
           items: [
             { name: "GitHub CodeQL", icon: "/skills/codeql.png" },
-            { name: "Trivy", icon: "https://cdn.simpleicons.org/trivy/white", className: "invert dark:invert-0" },
-            { name: "OWASP Security Practices", icon: "https://cdn.simpleicons.org/owasp/white", className: "invert dark:invert-0" },
-            { name: "SonarQube", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sonarqube/sonarqube-original.svg" },
-            { name: "Linux", icon: "https://skillicons.dev/icons?i=linux" }
+            {
+              name: "Trivy",
+              icon: "https://cdn.simpleicons.org/trivy/white",
+              className: "invert dark:invert-0",
+            },
+            {
+              name: "OWASP Security Practices",
+              icon: "https://cdn.simpleicons.org/owasp/white",
+              className: "invert dark:invert-0",
+            },
+            {
+              name: "SonarQube",
+              icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sonarqube/sonarqube-original.svg",
+            },
+            { name: "Linux", icon: "https://skillicons.dev/icons?i=linux" },
           ],
         },
       ],

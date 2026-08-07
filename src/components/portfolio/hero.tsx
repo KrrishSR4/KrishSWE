@@ -88,7 +88,7 @@ function HeroLedger() {
         const doc = document.documentElement;
         const max = doc.scrollHeight - window.innerHeight;
         const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-        
+
         if (barRef.current) {
           barRef.current.style.width = `${p * 100}%`;
         }
@@ -99,15 +99,17 @@ function HeroLedger() {
           Array.from(listRef.current.children).forEach((li, i) => {
             const done = p >= (i + 1) / LEDGER.length;
             const active = !done && p >= i / LEDGER.length;
-            
+
             if (active) {
-              li.className = "flex items-center gap-3 px-4 py-3 transition-colors duration-300 bg-primary text-primary-foreground";
+              li.className =
+                "flex items-center gap-3 px-4 py-3 transition-colors duration-300 bg-primary text-primary-foreground";
             } else if (done) {
-              li.className = "flex items-center gap-3 px-4 py-3 transition-colors duration-300 bg-surface-2";
+              li.className =
+                "flex items-center gap-3 px-4 py-3 transition-colors duration-300 bg-surface-2";
             } else {
               li.className = "flex items-center gap-3 px-4 py-3 transition-colors duration-300 ";
             }
-            
+
             const dot = li.children[0] as HTMLElement;
             if (active) {
               dot.className = "inline-block h-2 w-2 shrink-0 animate-pulse bg-primary-foreground";
@@ -116,12 +118,13 @@ function HeroLedger() {
             } else {
               dot.className = "inline-block h-2 w-2 shrink-0 bg-border-strong";
             }
-            
+
             const textRight = li.children[3] as HTMLElement;
             if (active) {
               textRight.className = "label-xs hidden shrink-0 tabular-nums sm:block ";
             } else {
-              textRight.className = "label-xs hidden shrink-0 tabular-nums sm:block text-muted-foreground";
+              textRight.className =
+                "label-xs hidden shrink-0 tabular-nums sm:block text-muted-foreground";
             }
           });
         }

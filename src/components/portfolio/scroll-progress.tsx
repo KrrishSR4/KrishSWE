@@ -100,7 +100,10 @@ export function ScrollProgress() {
           />
         </svg>
         <span className="label-xs relative leading-none">↑</span>
-        <span ref={textRef} className="label-xs absolute -top-6 right-0 hidden text-muted-foreground sm:block">
+        <span
+          ref={textRef}
+          className="label-xs absolute -top-6 right-0 hidden text-muted-foreground sm:block"
+        >
           0%
         </span>
       </button>

@@ -15,9 +15,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['@tanstack/react-router', '@tanstack/react-query'],
-          gsap: ['gsap'],
+          vendor: ["react", "react-dom"],
+          router: ["@tanstack/react-router", "@tanstack/react-query"],
+          gsap: ["gsap"],
         },
       },
     },

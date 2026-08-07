@@ -20,8 +20,6 @@ export function Skills() {
         meta={`${content.capabilities.length} domains · ${coreCount} core`}
       />
 
-
-
       {/* Domains */}
       <div className="mt-8 space-y-8">
         {content.capabilities.map((domain, di) => (
@@ -74,12 +72,22 @@ export function Skills() {
                             </span>
                           </div>
                         ))}
-                        {Array.from({ length: (3 - (group.items.length % 3)) % 3 }).map((_, idx) => (
-                          <div key={`placeholder-xl-${idx}`} className="hidden xl:block bg-background" />
-                        ))}
-                        {Array.from({ length: (2 - (group.items.length % 2)) % 2 }).map((_, idx) => (
-                          <div key={`placeholder-sm-${idx}`} className="hidden sm:block xl:hidden bg-background" />
-                        ))}
+                        {Array.from({ length: (3 - (group.items.length % 3)) % 3 }).map(
+                          (_, idx) => (
+                            <div
+                              key={`placeholder-xl-${idx}`}
+                              className="hidden xl:block bg-background"
+                            />
+                          ),
+                        )}
+                        {Array.from({ length: (2 - (group.items.length % 2)) % 2 }).map(
+                          (_, idx) => (
+                            <div
+                              key={`placeholder-sm-${idx}`}
+                              className="hidden sm:block xl:hidden bg-background"
+                            />
+                          ),
+                        )}
                       </StaggerGroup>
                     </div>
                   );
