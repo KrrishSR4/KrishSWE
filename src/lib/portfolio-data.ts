@@ -393,7 +393,7 @@ export const DEFAULT_CONTENT: PortfolioContent = {
           items: [
             { name: "JavaScript", core: true, icon: "https://skillicons.dev/icons?i=js" },
             { name: "TypeScript", core: true, icon: "https://skillicons.dev/icons?i=ts" },
-            { name: "Go", core: true, icon: "/skills/golang.png", className: "scale-[2.6]" },
+            { name: "Go", core: true, icon: "/skills/golang.png", className: "scale-[2.6] mr-4 ml-2" },
           ],
         },
         {
@@ -416,8 +416,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
             { name: "Express.js", icon: "https://skillicons.dev/icons?i=express" },
             { name: "REST APIs", icon: "https://cdn-icons-png.flaticon.com/512/2165/2165004.png" },
             { name: "GraphQL", icon: "https://skillicons.dev/icons?i=graphql" },
-            { name: "Authentication", icon: "/skills/authentication.png", className: "dark:invert" },
-            { name: "WebSockets", icon: "/skills/websockets.png", className: "dark:invert" },
+            { name: "Authentication", icon: "/skills/authentication.png" },
+            { name: "WebSockets", icon: "/skills/websockets.png" },
           ],
         },
         {

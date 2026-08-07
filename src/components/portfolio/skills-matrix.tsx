@@ -43,9 +43,11 @@ export function Skills() {
                 {domain.groups.map((group) => {
                   return (
                     <div key={group.id} className="border-t border-border-strong first:border-t-0">
-                      <div className="flex items-center justify-between bg-surface/30 px-4 py-3 sm:px-6">
-                        <span className="label-xs text-muted-foreground">{group.title}</span>
-                        <span className="label-xs text-muted-foreground opacity-50">
+                      <div className="flex items-center justify-between px-4 py-3 sm:px-6 border-b border-border-strong bg-transparent">
+                        <span className="inline-block px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-wider bg-primary text-primary-foreground border border-primary">
+                          {group.title}
+                        </span>
+                        <span className="text-xs font-mono text-muted-foreground opacity-70">
                           {String(group.items.length).padStart(2, "0")}
                         </span>
                       </div>
@@ -58,19 +60,25 @@ export function Skills() {
                           <div
                             key={item.name}
                             data-cap
-                            className={`flex items-center gap-3 bg-background px-4 py-3 transition-colors hover:bg-surface sm:px-6`}
+                            className={`flex items-center gap-3.5 bg-background px-4 py-3.5 transition-colors hover:bg-surface sm:px-6`}
                           >
                             {item.icon && (
                               <img
                                 src={item.icon}
                                 alt={item.name}
-                                className={`h-5 w-5 object-contain shrink-0 ${item.className || ""}`}
+                                className={`h-8 w-8 object-contain shrink-0 ${item.className || ""}`}
                               />
                             )}
-                            <span className="text-[0.95rem] leading-snug tracking-tight text-foreground">
+                            <span className="text-xs sm:text-[0.82rem] font-medium leading-snug tracking-tight text-foreground/90">
                               {item.name}
                             </span>
                           </div>
+                        ))}
+                        {Array.from({ length: (3 - (group.items.length % 3)) % 3 }).map((_, idx) => (
+                          <div key={`placeholder-xl-${idx}`} className="hidden xl:block bg-background" />
+                        ))}
+                        {Array.from({ length: (2 - (group.items.length % 2)) % 2 }).map((_, idx) => (
+                          <div key={`placeholder-sm-${idx}`} className="hidden sm:block xl:hidden bg-background" />
                         ))}
                       </StaggerGroup>
                     </div>
