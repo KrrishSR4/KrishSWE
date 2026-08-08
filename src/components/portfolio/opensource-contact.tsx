@@ -4,6 +4,118 @@ import { usePortfolio } from "@/lib/portfolio-store";
 import { gsap } from "@/lib/gsap";
 import { Reveal, SectionHeader } from "./primitives";
 
+interface GithubEvent {
+  id: string;
+  type: string;
+  repo: { name: string };
+  created_at: string;
+  payload: any;
+}
+
+function RecentActivity({ handle }: { handle: string }) {
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["gh-events", handle],
+    queryFn: async () => {
+      const res = await fetch(`https://api.github.com/users/${handle}/events/public`);
+      if (!res.ok) throw new Error("Failed to fetch events");
+      const events = (await res.json()) as GithubEvent[];
+      return events
+        .filter((e) =>
+          ["PushEvent", "IssuesEvent", "PullRequestEvent", "CreateEvent"].includes(e.type)
+        )
+        .slice(0, 3);
+    },
+    staleTime: 5 * 60_000,
+  });
+
+  if (isPending || isError || !data?.length) return null;
+
+  return (
+    <div className="flex flex-1 flex-col border border-border-strong bg-card">
+      <div className="border-b border-border px-4 py-3">
+        <span className="label-xs text-muted-foreground">Recent Activity</span>
+      </div>
+      <div className="flex flex-1 flex-col justify-center divide-y divide-border bg-background">
+        {data.map((ev) => {
+          let action = "did something in";
+          if (ev.type === "PushEvent") action = "pushed to";
+          if (ev.type === "IssuesEvent") action = `${ev.payload.action} an issue in`;
+          if (ev.type === "PullRequestEvent") action = `${ev.payload.action} a PR in`;
+          if (ev.type === "CreateEvent") action = `created ${ev.payload.ref_type} in`;
+
+          const date = new Date(ev.created_at).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+          });
+          const repoName = ev.repo.name.split("/")[1] || ev.repo.name;
+
+          return (
+            <div key={ev.id} className="px-4 py-4 text-[0.85rem] leading-relaxed">
+              <span className="text-muted-foreground">{date} · </span>
+              <span className="text-foreground/90">{action} </span>
+              <a
+                href={`https://github.com/${ev.repo.name}`}
+                target="_blank"
+                rel="noreferrer"
+                className="font-bold tracking-tight hover:text-primary transition-colors"
+              >
+                {repoName}
+              </a>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const GITHUB_LANGUAGES = [
+  { name: "JavaScript", percent: 45, color: "#f1e05a" },
+  { name: "TypeScript", percent: 30, color: "#3178c6" },
+  { name: "PL/SQL", percent: 12, color: "#dad8d8" },
+  { name: "Go", percent: 10, color: "#00ADD8" },
+  { name: "Python", percent: 3, color: "#3572A5" },
+];
+
+function GitHubLanguageBar() {
+  return (
+    <div className="flex flex-1 flex-col border border-border-strong bg-card">
+      <div className="flex items-center justify-between px-4 py-3 sm:px-6 border-b border-border-strong bg-transparent">
+        <span className="inline-block px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-wider bg-primary text-primary-foreground border border-primary">
+          PROGRAMMING LANGUAGES
+        </span>
+        <span className="text-xs font-mono text-muted-foreground opacity-70">
+          05
+        </span>
+      </div>
+      <div className="flex flex-1 flex-col justify-center p-4 sm:p-6 bg-background">
+        <div className="flex h-2.5 w-full overflow-hidden rounded-full border border-border-strong">
+          {GITHUB_LANGUAGES.map((lang) => (
+            <div
+              key={lang.name}
+              style={{ width: `${lang.percent}%`, backgroundColor: lang.color }}
+              className="h-full"
+              title={`${lang.name} ${lang.percent}%`}
+            />
+          ))}
+        </div>
+        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+          {GITHUB_LANGUAGES.map((lang) => (
+            <div key={lang.name} className="flex items-center gap-2">
+              <span
+                className="h-2.5 w-2.5 rounded-full"
+                style={{ backgroundColor: lang.color }}
+              />
+              <span className="text-[0.82rem] font-bold text-foreground/90 tracking-tight">{lang.name}</span>
+              <span className="text-[0.82rem] font-medium text-muted-foreground">{lang.percent}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface GithubOrg {
   id: number;
   login: string;
@@ -24,11 +136,11 @@ function ActiveOrganizations({ handle }: { handle: string }) {
   if (isPending || isError || !data?.length) return null;
 
   return (
-    <div className="flex flex-col border border-border-strong bg-card">
+    <div className="flex flex-1 flex-col border border-border-strong bg-card">
       <div className="border-b border-border px-4 py-3">
         <span className="label-xs text-muted-foreground">Active Organizations</span>
       </div>
-      <div className="flex flex-wrap gap-4 px-4 py-5">
+      <div className="flex flex-wrap items-center gap-4 px-4 py-5 flex-1">
         {data.map((org) => (
           <a
             key={org.id}
@@ -375,42 +487,11 @@ export function OpenSource() {
           </Reveal>
         </div>
 
-        <Reveal delay={80}>
+        <Reveal delay={80} className="h-full">
           <div className="flex h-full flex-col gap-6">
-            <div className="flex h-full flex-col border border-border-strong bg-card">
-              <div className="border-b border-border px-4 py-3">
-                <span className="label-xs text-muted-foreground">Pinned repositories</span>
-              </div>
-            <ul className="divide-y divide-border">
-              {content.repos.map((r) => (
-                <li key={r.id}>
-                  <a
-                    href={r.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="block px-4 py-4 transition-colors hover:bg-surface"
-                  >
-                    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-                      <span className="truncate text-sm font-semibold">{r.name}</span>
-                      <span className="label-xs shrink-0 text-muted-foreground">{r.language}</span>
-                    </div>
-                    <p className="mt-2 text-[0.8rem] leading-relaxed text-muted-foreground">
-                      {r.description}
-                    </p>
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <a
-              href={content.contact.github}
-              target="_blank"
-              rel="noreferrer"
-              className="label-xs mt-auto border-t border-border px-4 py-4 text-center transition-colors hover:bg-primary hover:text-primary-foreground"
-            >
-              All repositories ↗
-            </a>
-            </div>
             <ActiveOrganizations handle={content.identity.handle} />
+            <RecentActivity handle={content.identity.handle} />
+            <GitHubLanguageBar />
           </div>
         </Reveal>
       </div>
