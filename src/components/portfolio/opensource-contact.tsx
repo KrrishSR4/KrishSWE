@@ -4,6 +4,52 @@ import { usePortfolio } from "@/lib/portfolio-store";
 import { gsap } from "@/lib/gsap";
 import { Reveal, SectionHeader } from "./primitives";
 
+interface GithubOrg {
+  id: number;
+  login: string;
+  avatar_url: string;
+}
+
+function ActiveOrganizations({ handle }: { handle: string }) {
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["gh-orgs", handle],
+    queryFn: async () => {
+      const res = await fetch(`https://api.github.com/users/${handle}/orgs`);
+      if (!res.ok) throw new Error("Failed to fetch organizations");
+      return res.json() as Promise<GithubOrg[]>;
+    },
+    staleTime: 5 * 60_000,
+  });
+
+  if (isPending || isError || !data?.length) return null;
+
+  return (
+    <div className="flex flex-col border border-border-strong bg-card">
+      <div className="border-b border-border px-4 py-3">
+        <span className="label-xs text-muted-foreground">Active Organizations</span>
+      </div>
+      <div className="flex flex-wrap gap-4 px-4 py-5">
+        {data.map((org) => (
+          <a
+            key={org.id}
+            href={`https://github.com/${org.login}`}
+            target="_blank"
+            rel="noreferrer"
+            title={org.login}
+            className="transition-transform hover:scale-110"
+          >
+            <img
+              src={org.avatar_url}
+              alt={org.login}
+              className="h-12 w-12 rounded-md object-cover border border-border bg-surface"
+            />
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 interface Day {
   date: string;
   count: number;
@@ -330,10 +376,11 @@ export function OpenSource() {
         </div>
 
         <Reveal delay={80}>
-          <div className="flex h-full flex-col border border-border-strong bg-card">
-            <div className="border-b border-border px-4 py-3">
-              <span className="label-xs text-muted-foreground">Pinned repositories</span>
-            </div>
+          <div className="flex h-full flex-col gap-6">
+            <div className="flex h-full flex-col border border-border-strong bg-card">
+              <div className="border-b border-border px-4 py-3">
+                <span className="label-xs text-muted-foreground">Pinned repositories</span>
+              </div>
             <ul className="divide-y divide-border">
               {content.repos.map((r) => (
                 <li key={r.id}>
@@ -362,6 +409,8 @@ export function OpenSource() {
             >
               All repositories ↗
             </a>
+            </div>
+            <ActiveOrganizations handle={content.identity.handle} />
           </div>
         </Reveal>
       </div>

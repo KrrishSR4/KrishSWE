@@ -2,6 +2,43 @@ import { usePortfolio } from "@/lib/portfolio-store";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Reveal, SectionHeader, StaggerGroup } from "./primitives";
 
+const GITHUB_LANGUAGES = [
+  { name: "JavaScript", percent: 45, color: "#f1e05a" },
+  { name: "TypeScript", percent: 30, color: "#3178c6" },
+  { name: "PL/SQL", percent: 12, color: "#dad8d8" },
+  { name: "Go", percent: 10, color: "#00ADD8" },
+  { name: "Python", percent: 3, color: "#3572A5" },
+];
+
+function GitHubLanguageBar() {
+  return (
+    <div className="p-4 sm:p-6 bg-background">
+      <div className="flex h-2.5 w-full overflow-hidden rounded-full border border-border-strong">
+        {GITHUB_LANGUAGES.map((lang) => (
+          <div
+            key={lang.name}
+            style={{ width: `${lang.percent}%`, backgroundColor: lang.color }}
+            className="h-full"
+            title={`${lang.name} ${lang.percent}%`}
+          />
+        ))}
+      </div>
+      <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+        {GITHUB_LANGUAGES.map((lang) => (
+          <div key={lang.name} className="flex items-center gap-2">
+            <span
+              className="h-2.5 w-2.5 rounded-full"
+              style={{ backgroundColor: lang.color }}
+            />
+            <span className="text-[0.82rem] font-bold text-foreground/90 tracking-tight">{lang.name}</span>
+            <span className="text-[0.82rem] font-medium text-muted-foreground">{lang.percent}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function Skills() {
   const { content } = usePortfolio();
   const isMobile = useIsMobile();
@@ -49,46 +86,50 @@ export function Skills() {
                           {String(group.items.length).padStart(2, "0")}
                         </span>
                       </div>
-                      <StaggerGroup
-                        selector="[data-cap]"
-                        stagger={0.03}
-                        className="grid gap-px border-t border-border bg-border sm:grid-cols-2 xl:grid-cols-3"
-                      >
-                        {group.items.map((item) => (
-                          <div
-                            key={item.name}
-                            data-cap
-                            className={`flex items-center gap-3.5 bg-background px-4 py-3.5 transition-colors hover:bg-surface sm:px-6`}
-                          >
-                            {item.icon && (
-                              <img
-                                src={item.icon}
-                                alt={item.name}
-                                className={`h-8 w-8 object-contain shrink-0 ${item.className || ""}`}
+                      {group.id === "languages" ? (
+                        <GitHubLanguageBar />
+                      ) : (
+                        <StaggerGroup
+                          selector="[data-cap]"
+                          stagger={0.03}
+                          className="grid gap-px border-t border-border bg-border sm:grid-cols-2 xl:grid-cols-3"
+                        >
+                          {group.items.map((item) => (
+                            <div
+                              key={item.name}
+                              data-cap
+                              className={`flex items-center gap-3.5 bg-background px-4 py-3.5 transition-colors hover:bg-surface sm:px-6`}
+                            >
+                              {item.icon && (
+                                <img
+                                  src={item.icon}
+                                  alt={item.name}
+                                  className={`h-8 w-8 object-contain shrink-0 ${item.className || ""}`}
+                                />
+                              )}
+                              <span className="text-xs sm:text-[0.82rem] font-medium leading-snug tracking-tight text-foreground/90">
+                                {item.name}
+                              </span>
+                            </div>
+                          ))}
+                          {Array.from({ length: (3 - (group.items.length % 3)) % 3 }).map(
+                            (_, idx) => (
+                              <div
+                                key={`placeholder-xl-${idx}`}
+                                className="hidden xl:block bg-background"
                               />
-                            )}
-                            <span className="text-xs sm:text-[0.82rem] font-medium leading-snug tracking-tight text-foreground/90">
-                              {item.name}
-                            </span>
-                          </div>
-                        ))}
-                        {Array.from({ length: (3 - (group.items.length % 3)) % 3 }).map(
-                          (_, idx) => (
-                            <div
-                              key={`placeholder-xl-${idx}`}
-                              className="hidden xl:block bg-background"
-                            />
-                          ),
-                        )}
-                        {Array.from({ length: (2 - (group.items.length % 2)) % 2 }).map(
-                          (_, idx) => (
-                            <div
-                              key={`placeholder-sm-${idx}`}
-                              className="hidden sm:block xl:hidden bg-background"
-                            />
-                          ),
-                        )}
-                      </StaggerGroup>
+                            ),
+                          )}
+                          {Array.from({ length: (2 - (group.items.length % 2)) % 2 }).map(
+                            (_, idx) => (
+                              <div
+                                key={`placeholder-sm-${idx}`}
+                                className="hidden sm:block xl:hidden bg-background"
+                              />
+                            ),
+                          )}
+                        </StaggerGroup>
+                      )}
                     </div>
                   );
                 })}
