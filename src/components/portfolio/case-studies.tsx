@@ -23,7 +23,7 @@ function Block({ label, children }: { label: string; children: React.ReactNode }
   return (
     <div className="grid gap-3 border-t-2 border-border-strong py-6 md:grid-cols-[minmax(0,11rem)_1fr] md:gap-8">
       <span className="label-xs text-primary">{label}</span>
-      <div className="min-w-0 text-sm leading-relaxed text-muted-foreground">{children}</div>
+      <div className="min-w-0 text-sm leading-relaxed text-muted-foreground whitespace-pre-line">{children}</div>
     </div>
   );
 }
