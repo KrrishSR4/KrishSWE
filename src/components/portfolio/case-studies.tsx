@@ -187,7 +187,7 @@ function CaseCard({ p, i }: { p: Project; i: number }) {
 
         <div className="grid lg:grid-cols-[1.1fr_1fr]">
           <div
-            className={`p-4 sm:p-8 ${alt ? "lg:order-2 lg:border-l-2" : "lg:border-r-2"} border-border-strong`}
+            className={`min-w-0 p-4 sm:p-8 ${alt ? "lg:order-2 lg:border-l-2" : "lg:border-r-2"} border-border-strong`}
           >
             <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
               {p.summary}
@@ -211,7 +211,7 @@ function CaseCard({ p, i }: { p: Project; i: number }) {
             </Block>
           </div>
 
-          <div className={`flex flex-col bg-surface ${alt ? "lg:order-1" : ""}`}>
+          <div className={`min-w-0 flex flex-col bg-surface ${alt ? "lg:order-1" : ""}`}>
             <div className="label-xs border-b-2 border-border-strong bg-foreground px-4 py-2 text-background">
               Architecture · {p.architecture.length} stages
             </div>
