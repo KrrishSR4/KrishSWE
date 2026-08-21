@@ -276,9 +276,9 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       impact:
         "Turns file sharing from a simple upload-and-link workflow into a controlled sharing system with security checks, lifecycle controls, one-time access, revocation, expiration, and auditable operations.",
       problem:
-        "Traditional file sharing often provides limited control once a file is shared. Links may remain accessible longer than intended, downloads may not be restricted, and operational events can be difficult to track.\n\nSecureShare was built to provide controlled file sharing with explicit expiration, revocation, one-time download behavior, and audit visibility.",
+        "Traditional file sharing offers limited control over shared links, downloads, and file access. SecureShare provides expiration, revocation, one-time downloads, and audit visibility.",
       solution:
-        "SecureShare provides authenticated file sharing with temporary links, one-time downloads, expiration controls, revocation, recipient access without requiring account authentication, and operational audit logging.\n\nThe production stack uses Cloudflare for deployment, Supabase for application data and logs, and GitHub-based automation for CI/CD and DevSecOps.",
+        "SecureShare enables controlled file sharing with temporary links, one-time downloads, expiration, revocation, and audit logging — deployed on Cloudflare with PostgreSQL and GitHub Actions for CI/CD and DevSecOps.",
       architecture: [
         "Authenticated users create and manage secure file shares through the application.",
         "Files are stored outside the PostgreSQL database while Supabase stores share metadata and operational audit logs.",
