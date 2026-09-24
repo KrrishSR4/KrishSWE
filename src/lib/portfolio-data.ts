@@ -27,15 +27,6 @@ export interface Project {
   solution: string;
   architecture: string[];
   metrics: { label: string; value: string }[];
-  jobLifecycle?: { title: string; steps: string[] }[];
-  technicalDeepDive?: { label: string; value: string }[];
-  infrastructure?: { flow: string[]; description: string[] };
-  observability?: { metricsFlow: string; logsFlow: string; monitored: string[]; logEvents: string[] };
-  testing?: string[];
-  engineeringDecisions?: { label: string; value: string }[];
-  challenges?: string[];
-  finalImpact?: string;
-  hasVisualArchitecture?: boolean;
 }
 
 export interface CapabilityItem {
@@ -188,6 +179,7 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       tags: ["DISTRIBUTED SYSTEMS", "JOB QUEUE", "GO BACKEND", "REDIS", "KUBERNETES", "OBSERVABILITY", "SRE"],
       stack: ["Go", "Redis", "PostgreSQL", "WebSocket", "Docker", "Kubernetes", "Terraform", "GitHub Actions", "Prometheus", "Grafana", "Loki", "Grafana Alloy"],
       repo: "https://github.com/KrrishSR4/Distributed-job-queue",
+      live: "https://djqangular.pages.dev/",
       status: "Production",
       impact: "Transforms asynchronous workloads into a reliable processing pipeline with controlled concurrency, failure recovery, real-time visibility, and production-oriented infrastructure.",
       problem: "Directly processing long-running or failure-prone workloads inside synchronous API requests creates unreliable execution, poor fault recovery, and limited control over concurrency. Key issues include asynchronous work, worker coordination, failure recovery, retries, queue backlog, priority handling, scheduled execution, and observability.",
@@ -206,73 +198,7 @@ export const DEFAULT_CONTENT: PortfolioContent = {
         { label: "WORKERS", value: "GO WORKER POOL" },
         { label: "DATABASE", value: "POSTGRESQL" },
         { label: "RUNTIME", value: "DOCKER + K8S" }
-      ],
-      jobLifecycle: [
-        { title: "Happy Path", steps: ["QUEUED", "PROCESSING", "COMPLETED"] },
-        { title: "Failure Path", steps: ["PROCESSING", "FAILED", "RETRY", "PROCESSING"] },
-        { title: "Terminal Path", steps: ["FAILED", "MAX ATTEMPTS", "DLQ"] },
-        { title: "Scheduled", steps: ["SCHEDULED", "QUEUED"] },
-        { title: "Cancellation", steps: ["QUEUED", "CANCELLED"] },
-        { title: "Timeout", steps: ["PROCESSING", "TIMEOUT / RECOVERY", "RETRY or FAILED"] }
-      ],
-      technicalDeepDive: [
-        { label: "QUEUE", value: "Redis-backed queue for fast transport and blocking job consumption, with PostgreSQL acting as the durable source of truth." },
-        { label: "WORKERS", value: "Go worker pool ensures controlled concurrency and efficient execution of jobs." },
-        { label: "RETRY", value: "Failed jobs are automatically retried using exponential backoff up to a maximum number of attempts." },
-        { label: "PRIORITY", value: "Supports high, medium, and low priority handling to ensure critical jobs are processed first." },
-        { label: "SCHEDULER", value: "Allows delayed and scheduled job execution." },
-        { label: "DLQ", value: "Terminal failures are routed to a Dead Letter Queue for manual inspection and recovery." },
-        { label: "CANCELLATION", value: "Cancellation state is checked by workers and scheduler to halt execution." },
-        { label: "TIMEOUT & RECOVERY", value: "Stuck-job detection mechanism recovers jobs that exceed their processing timeout." },
-        { label: "WEBSOCKET", value: "Real-time job lifecycle updates are streamed directly to the dashboard without polling." }
-      ],
-      infrastructure: {
-        flow: ["GitHub", "GitHub Actions", "Docker", "Kubernetes", "API + Workers", "PostgreSQL + Redis"],
-        description: [
-          "Multi-stage Docker builds to ensure minimal image sizes.",
-          "Docker Compose for local development.",
-          "Kubernetes deployments with Services for production orchestration.",
-          "Scaling, rolling updates, and health probes.",
-          "Graceful shutdown of workers to prevent job loss.",
-          "Persistent PostgreSQL storage and Redis service.",
-          "Secure configuration and secrets management."
-        ]
-      },
-      observability: {
-        metricsFlow: "Prometheus → Grafana",
-        logsFlow: "Grafana Alloy → Loki → Grafana",
-        monitored: ["HTTP request rate", "Request latency", "Errors", "Jobs created", "Jobs completed", "Jobs failed", "Retries", "DLQ", "Queue depth", "Active workers", "Processing duration"],
-        logEvents: ["API errors", "Worker errors", "Retries", "Failures", "DLQ events", "Job lifecycle events"]
-      },
-      testing: [
-        "Go unit tests",
-        "Integration testing",
-        "Worker concurrency",
-        "Retry and DLQ testing",
-        "Scheduling and cancellation testing",
-        "Timeout and recovery testing",
-        "WebSocket testing",
-        "Docker and Kubernetes validation",
-        "Load testing and CI/CD validation"
-      ],
-      engineeringDecisions: [
-        { label: "WHY REDIS?", value: "Fast queue transport and blocking job consumption." },
-        { label: "WHY POSTGRESQL?", value: "Durable source of truth for job state and lifecycle." },
-        { label: "WHY GO?", value: "Lightweight concurrency model and efficient worker execution." },
-        { label: "WHY KUBERNETES?", value: "Container orchestration, service discovery, scaling and recovery." },
-        { label: "WHY WEBSOCKET?", value: "Real-time dashboard updates without polling." },
-        { label: "WHY PROMETHEUS + LOKI?", value: "Separate metrics and logs with centralized Grafana visibility." }
-      ],
-      challenges: [
-        "Preventing duplicate processing across concurrent workers.",
-        "Handling retry logic and preventing queue backlogs.",
-        "Managing stuck jobs and resolving cancellation races.",
-        "Ensuring graceful shutdown without dropping active workloads.",
-        "Maintaining consistency between Redis and PostgreSQL.",
-        "Handling WebSocket disconnects and managing observability cardinality."
-      ],
-      finalImpact: "Designed as a production-oriented distributed processing system where reliability, failure recovery, observability and controlled concurrency are first-class concerns.",
-      hasVisualArchitecture: true
+      ]
     },
     {
       id: "repoxray",
@@ -514,6 +440,24 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       fileUrl: "/certificates/GraphQL-Krish.pdf",
       thumbUrl: "/certificates/Graph Developer – Professional.png",
       skills: "GraphQL, Apollo Federation, Supergraph Architecture, API Federation",
+    },
+    {
+      id: "cert-15",
+      title: "AWS Cloud Practitioner Essentials",
+      issuer: "Amazon Web Services (AWS)",
+      date: "18 September 2026",
+      fileUrl: "/certificates/aws-cloud-practitioner.png",
+      thumbUrl: "/certificates/aws-cloud-practitioner.png",
+      skills: "AWS Cloud Fundamentals, Cloud Computing, AWS Core Services, Security & Billing",
+    },
+    {
+      id: "cert-16",
+      title: "Domain 2 Review: AWS Certified DevOps Engineer – Professional (DOP-C02)",
+      issuer: "Amazon Web Services (AWS)",
+      date: "18 September 2026",
+      fileUrl: "/certificates/aws-devops-engineer.png",
+      thumbUrl: "/certificates/aws-devops-engineer.png",
+      skills: "AWS DevOps, CI/CD, Automation, Monitoring & Logging",
     },
     {
       id: "cert-11",
