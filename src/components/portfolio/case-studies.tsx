@@ -107,6 +107,35 @@ function Pipeline({ steps }: { steps: string[] }) {
   );
 }
 
+function VisualArchitecture() {
+  return (
+    <Block label="System Architecture">
+      <div className="font-mono text-[0.7rem] sm:text-[0.8rem] leading-tight whitespace-pre bg-surface p-4 border-2 border-border-strong overflow-x-auto text-muted-foreground">
+{`Angular Frontend
+        |
+        v
+Go API
+        |
+        +------------------+
+        |                  |
+        v                  v
+ PostgreSQL            Redis Queue
+        |                  |
+        |                  v
+        |            Go Worker Pool
+        |                  |
+        +---------> Job State
+                           |
+                           v
+                     WebSocket
+                           |
+                           v
+                    Angular Dashboard`}
+      </div>
+    </Block>
+  );
+}
+
 function CaseCard({ p, i }: { p: Project; i: number }) {
   const alt = i % 2 === 1;
   const ref = useRef<HTMLElement>(null);
@@ -209,6 +238,135 @@ function CaseCard({ p, i }: { p: Project; i: number }) {
                 ))}
               </div>
             </Block>
+
+            {p.hasVisualArchitecture && <VisualArchitecture />}
+
+            {p.jobLifecycle && (
+              <Block label="Job Lifecycle">
+                <div className="flex flex-col gap-5">
+                  {p.jobLifecycle.map((cycle) => (
+                    <div key={cycle.title}>
+                      <span className="text-foreground font-semibold uppercase text-xs tracking-wider">{cycle.title}</span>
+                      <div className="mt-2 flex flex-wrap items-center gap-2 font-mono text-xs text-primary">
+                        {cycle.steps.map((step, idx) => (
+                          <span key={idx} className="flex items-center gap-2">
+                            <span className="bg-surface px-2 py-1 border border-border-strong">{step}</span>
+                            {idx < cycle.steps.length - 1 && <span>→</span>}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Block>
+            )}
+
+            {p.technicalDeepDive && (
+              <Block label="Technical Deep Dive">
+                <div className="flex flex-col gap-4">
+                  {p.technicalDeepDive.map((item) => (
+                    <div key={item.label}>
+                      <span className="text-foreground font-semibold uppercase text-xs tracking-wider">{item.label}</span>
+                      <p className="mt-1">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </Block>
+            )}
+
+            {p.infrastructure && (
+              <Block label="Infrastructure">
+                <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-primary mb-4">
+                  {p.infrastructure.flow.map((step, idx) => (
+                    <span key={idx} className="flex items-center gap-2">
+                      <span className="bg-surface px-2 py-1 border border-border-strong">{step}</span>
+                      {idx < p.infrastructure.flow.length - 1 && <span>→</span>}
+                    </span>
+                  ))}
+                </div>
+                <ul className="list-disc pl-4 space-y-1">
+                  {p.infrastructure.description.map((desc, idx) => (
+                    <li key={idx}>{desc}</li>
+                  ))}
+                </ul>
+              </Block>
+            )}
+
+            {p.observability && (
+              <Block label="Observability">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <span className="text-foreground font-semibold uppercase text-xs tracking-wider">Metrics</span>
+                    <div className="mt-2 font-mono text-xs text-primary bg-surface px-2 py-1 border border-border-strong inline-block">
+                      {p.observability.metricsFlow}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-foreground font-semibold uppercase text-xs tracking-wider">Logs</span>
+                    <div className="mt-2 font-mono text-xs text-primary bg-surface px-2 py-1 border border-border-strong inline-block">
+                      {p.observability.logsFlow}
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-foreground font-semibold uppercase text-xs tracking-wider">Monitored</span>
+                    <ul className="list-disc pl-4 mt-2 space-y-1">
+                      {p.observability.monitored.map((m, idx) => (
+                        <li key={idx}>{m}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <span className="text-foreground font-semibold uppercase text-xs tracking-wider">Log Events</span>
+                    <ul className="list-disc pl-4 mt-2 space-y-1">
+                      {p.observability.logEvents.map((m, idx) => (
+                        <li key={idx}>{m}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </Block>
+            )}
+
+            {p.testing && (
+              <Block label="Testing">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 list-disc pl-4">
+                  {p.testing.map((t, idx) => (
+                    <li key={idx}>{t}</li>
+                  ))}
+                </ul>
+              </Block>
+            )}
+
+            {p.engineeringDecisions && (
+              <Block label="Engineering Decisions">
+                <div className="flex flex-col gap-4">
+                  {p.engineeringDecisions.map((item) => (
+                    <div key={item.label}>
+                      <span className="text-foreground font-semibold uppercase text-xs tracking-wider">{item.label}</span>
+                      <p className="mt-1">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </Block>
+            )}
+
+            {p.challenges && (
+              <Block label="Challenges">
+                <ul className="list-disc pl-4 space-y-1">
+                  {p.challenges.map((c, idx) => (
+                    <li key={idx}>{c}</li>
+                  ))}
+                </ul>
+              </Block>
+            )}
+
+            {p.finalImpact && (
+              <Block label="Final Impact">
+                <span className="font-semibold text-foreground">{p.finalImpact}</span>
+              </Block>
+            )}
           </div>
 
           <div className={`min-w-0 flex flex-col bg-surface ${alt ? "lg:order-1" : ""}`}>
