@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { usePortfolio } from "@/lib/portfolio-store";
 import { gsap } from "@/lib/gsap";
 import { Reveal, SectionHeader } from "./primitives";
+import { getPdfDownloadUrl } from "@/lib/drive-utils";
 
 interface GithubEvent {
   id: string;
@@ -505,7 +506,7 @@ export function Contact() {
     { k: "Email", v: c.email, href: `mailto:${c.email}` },
     { k: "GitHub", v: c.github.replace("https://", ""), href: c.github },
     { k: "LinkedIn", v: c.linkedin.replace("https://", ""), href: c.linkedin },
-    { k: "Resume", v: "Download PDF", href: c.resumeUrl },
+    { k: "Resume", v: "Download PDF", href: getPdfDownloadUrl(c.resumeUrl) || c.resumeUrl },
   ];
 
   return (

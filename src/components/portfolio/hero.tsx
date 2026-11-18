@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { usePortfolio } from "@/lib/portfolio-store";
 import { gsap } from "@/lib/gsap";
+import { getPdfDownloadUrl } from "@/lib/drive-utils";
 
 const TAPE = [
   "SCALABLE SYSTEMS",
@@ -387,7 +388,10 @@ export function Hero() {
                 Certificates <span aria-hidden>↗</span>
               </Link>
               <a
-                href={contact.resumeUrl}
+                href={getPdfDownloadUrl(contact.resumeUrl) || contact.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
                 data-intro="cta"
                 className="label-xs flex items-center justify-between border-2 border-border-strong px-4 py-5 transition-colors hover:bg-foreground hover:text-background sm:border-l-0 lg:border-l-0"
               >

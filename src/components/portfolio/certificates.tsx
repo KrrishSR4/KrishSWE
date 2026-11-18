@@ -2,15 +2,29 @@ import { useState, useEffect } from "react";
 import { usePortfolio } from "@/lib/portfolio-store";
 import { Reveal, SectionHeader } from "./primitives";
 import type { Certificate } from "@/lib/portfolio-data";
-
-function isImage(url: string) {
-  return url.match(/\.(jpeg|jpg|png|gif|webp)$/i) != null;
-}
+import {
+  extractGoogleDriveId,
+  isGoogleDriveUrl,
+  isImageUrl,
+  isPdfUrl,
+  getPdfPreviewUrl,
+  getPdfDownloadUrl,
+  getExternalViewUrl,
+} from "@/lib/drive-utils";
+import { FileText, Download, ExternalLink, Image as ImageIcon, Eye } from "lucide-react";
 
 function CertificateModal({ cert, onClose }: { cert: Certificate | null; onClose: () => void }) {
+  const [viewMode, setViewMode] = useState<"document" | "image">("document");
+
   useEffect(() => {
     if (cert) {
       document.body.style.overflow = "hidden";
+      // Auto-select mode: if it's a PDF/Drive file, prefer document view; if only image, prefer image
+      if (cert.fileUrl && (isPdfUrl(cert.fileUrl) || isGoogleDriveUrl(cert.fileUrl))) {
+        setViewMode("document");
+      } else {
+        setViewMode("image");
+      }
     } else {
       document.body.style.overflow = "";
     }
@@ -21,70 +35,152 @@ function CertificateModal({ cert, onClose }: { cert: Certificate | null; onClose
 
   if (!cert) return null;
 
+  const hasPdfOrDrive = cert.fileUrl && (isPdfUrl(cert.fileUrl) || isGoogleDriveUrl(cert.fileUrl));
+  const hasThumbOrImage = cert.thumbUrl || (cert.fileUrl && isImageUrl(cert.fileUrl));
+  const previewUrl = getPdfPreviewUrl(cert.fileUrl);
+  const downloadUrl = getPdfDownloadUrl(cert.fileUrl);
+  const externalUrl = getExternalViewUrl(cert.fileUrl);
+  const isDrive = isGoogleDriveUrl(cert.fileUrl);
+
   return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 sm:p-8">
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-3 sm:p-6 md:p-8">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-background/90 backdrop-blur-sm"
+        className="absolute inset-0 bg-background/90 backdrop-blur-md"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-[1000px] h-full max-h-[90vh] flex flex-col border-2 border-border-strong bg-background shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-[1100px] h-full max-h-[92vh] flex flex-col border-2 border-border-strong bg-background shadow-2xl animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between border-b-2 border-border-strong bg-surface px-4 py-3 shrink-0">
-          <div className="min-w-0">
-            <span className="label-xs text-primary">PREVIEW</span>
-            <p className="truncate font-semibold text-sm">{cert.title}</p>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-border-strong bg-surface px-4 py-3 shrink-0">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="label-xs text-primary font-bold">PREVIEW</span>
+              {isDrive && (
+                <span className="label-xs border border-accent bg-accent/10 text-accent px-1.5 py-0.2">
+                  GOOGLE DRIVE
+                </span>
+              )}
+            </div>
+            <p className="truncate font-bold text-sm sm:text-base text-foreground mt-0.5">
+              {cert.title}
+            </p>
           </div>
+
+          {/* View Mode Toggle if both are available */}
+          {hasPdfOrDrive && hasThumbOrImage && (
+            <div className="flex items-center border border-border bg-background p-0.5">
+              <button
+                type="button"
+                onClick={() => setViewMode("document")}
+                className={`label-xs flex items-center gap-1.5 px-3 py-1.5 transition-colors cursor-pointer ${
+                  viewMode === "document"
+                    ? "bg-primary text-primary-foreground font-bold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <FileText className="h-3.5 w-3.5" />
+                <span>PDF Document</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("image")}
+                className={`label-xs flex items-center gap-1.5 px-3 py-1.5 transition-colors cursor-pointer ${
+                  viewMode === "image"
+                    ? "bg-primary text-primary-foreground font-bold"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <ImageIcon className="h-3.5 w-3.5" />
+                <span>Image Badge</span>
+              </button>
+            </div>
+          )}
+
           <button
             onClick={onClose}
-            className="label-xs shrink-0 border-2 border-border-strong px-4 py-2 transition-colors hover:bg-destructive hover:text-destructive-foreground hover:border-destructive"
+            className="label-xs shrink-0 border border-border-strong px-4 py-2 transition-colors hover:bg-destructive hover:text-destructive-foreground hover:border-destructive cursor-pointer"
             aria-label="Close Preview"
           >
-            CLOSE
+            CLOSE ✕
           </button>
         </div>
 
-        {/* Iframe or Image Container */}
-        <div className="relative flex-1 w-full h-full bg-surface-2 overflow-hidden flex items-center justify-center p-2 sm:p-6">
-          {cert.thumbUrl || (cert.fileUrl && isImage(cert.fileUrl)) ? (
-            <img
-              src={cert.thumbUrl || cert.fileUrl}
-              alt={cert.title}
-              className="max-w-full max-h-full object-contain drop-shadow-xl"
-            />
-          ) : cert.fileUrl ? (
+        {/* Content Container */}
+        <div className="relative flex-1 w-full h-full bg-surface-2 overflow-hidden flex items-center justify-center">
+          {viewMode === "document" && hasPdfOrDrive ? (
             <iframe
-              src={cert.fileUrl}
-              className="absolute inset-0 w-full h-full border-none bg-white"
+              src={previewUrl}
+              className="w-full h-full border-none bg-white"
               title={cert.title}
+              allow="autoplay"
+            />
+          ) : hasThumbOrImage ? (
+            <div className="w-full h-full p-4 flex items-center justify-center overflow-auto">
+              <img
+                src={cert.thumbUrl || cert.fileUrl}
+                alt={cert.title}
+                className="max-w-full max-h-full object-contain drop-shadow-2xl"
+              />
+            </div>
+          ) : hasPdfOrDrive ? (
+            <iframe
+              src={previewUrl}
+              className="w-full h-full border-none bg-white"
+              title={cert.title}
+              allow="autoplay"
             />
           ) : (
-            <div className="flex h-full items-center justify-center p-6 text-center">
-              <p className="text-muted-foreground">No preview file available.</p>
+            <div className="flex h-full flex-col items-center justify-center p-6 text-center">
+              <FileText className="h-12 w-12 text-muted-foreground mb-3" />
+              <p className="text-muted-foreground text-sm">
+                No preview document or image available.
+              </p>
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="flex flex-wrap items-center gap-4 border-t-2 border-border-strong bg-surface px-4 py-3 shrink-0">
-          <span className="label-xs text-muted-foreground">
-            ISSUER: <span className="text-foreground">{cert.issuer}</span>
-          </span>
-          <span className="label-xs text-muted-foreground hidden sm:block">|</span>
-          <span className="label-xs text-muted-foreground">
-            DATE: <span className="text-foreground">{cert.date}</span>
-          </span>
-          <a
-            href={cert.fileUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="label-xs ml-auto border-2 border-primary bg-primary px-4 py-2 text-primary-foreground hover:bg-transparent hover:text-primary transition-colors"
-          >
-            OPEN FILE ↗
-          </a>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t-2 border-border-strong bg-surface px-4 py-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs text-muted-foreground">
+            <span>
+              ISSUER: <strong className="text-foreground">{cert.issuer}</strong>
+            </span>
+            <span className="hidden sm:inline">|</span>
+            <span>
+              DATE: <strong className="text-foreground">{cert.date}</strong>
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 ml-auto">
+            {cert.fileUrl && (
+              <>
+                <a
+                  href={downloadUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="label-xs inline-flex items-center gap-1.5 border border-border-strong bg-background px-3 py-2 text-foreground transition-colors hover:border-primary hover:text-primary"
+                  title="Direct Download"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  <span>DOWNLOAD</span>
+                </a>
+                <a
+                  href={externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="label-xs inline-flex items-center gap-1.5 border border-primary bg-primary px-3.5 py-2 text-primary-foreground transition-transform hover:-translate-y-0.5 font-bold"
+                  title="Open in new tab / Google Drive"
+                >
+                  <span>OPEN {isDrive ? "IN DRIVE" : "FILE"}</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -127,7 +223,7 @@ export function Certificates() {
                 >
                   <div className="relative aspect-[4/3] w-full border-b-2 border-border-strong bg-surface-2 overflow-hidden flex flex-col items-center justify-center p-6">
                     {/* Thumbnail Image if applicable */}
-                    {(cert.thumbUrl || isImage(cert.fileUrl)) && (
+                    {(cert.thumbUrl || isImageUrl(cert.fileUrl)) && (
                       <img
                         src={cert.thumbUrl || cert.fileUrl}
                         alt={`${cert.title} preview`}
@@ -136,26 +232,33 @@ export function Certificates() {
                       />
                     )}
 
+                    {/* Google Drive / PDF badge */}
+                    {isGoogleDriveUrl(cert.fileUrl) ? (
+                      <div className="absolute top-2 right-2 z-20">
+                        <span className="label-xs border border-accent bg-background/90 text-accent px-2 py-0.5 font-bold shadow">
+                          GOOGLE DRIVE
+                        </span>
+                      </div>
+                    ) : isPdfUrl(cert.fileUrl) ? (
+                      <div className="absolute top-2 right-2 z-20">
+                        <span className="label-xs border border-primary bg-background/90 text-primary px-2 py-0.5 font-bold shadow">
+                          PDF DOC
+                        </span>
+                      </div>
+                    ) : null}
+
                     {/* Abstract placeholder visual */}
                     <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(0,0,0,0.02)_10px,rgba(0,0,0,0.02)_11px)] dark:bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.02)_10px,rgba(255,255,255,0.02)_11px)] z-0" />
 
-                    {!(cert.thumbUrl || isImage(cert.fileUrl)) && (
-                      <svg
-                        className="w-16 h-16 text-muted-foreground mb-4 group-hover:text-primary transition-colors relative z-10"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="square"
-                          strokeLinejoin="miter"
-                          strokeWidth={1.5}
-                          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                        />
-                      </svg>
+                    {!(cert.thumbUrl || isImageUrl(cert.fileUrl)) && (
+                      <FileText className="w-16 h-16 text-muted-foreground mb-4 group-hover:text-primary transition-colors relative z-10" />
                     )}
 
-                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300 z-10" />
+                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                      <span className="label-xs border border-primary bg-background/95 px-3 py-1.5 text-primary font-bold shadow-lg">
+                        CLICK TO PREVIEW / DOWNLOAD
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex flex-col flex-1 p-5 sm:p-6">

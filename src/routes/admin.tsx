@@ -1,10 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { usePortfolio, useShellClass } from "@/lib/portfolio-store";
-import type { Project, ProjectStatus, SiteSettings } from "@/lib/portfolio-data";
+import type { Project, ProjectStatus, SiteSettings, Certificate } from "@/lib/portfolio-data";
 import { SECTION_LABELS, THEMES_METADATA, FONTS_METADATA } from "@/lib/portfolio-data";
 import { useThemeMode } from "@/lib/theme-mode";
-import { Check, Sun, Moon } from "lucide-react";
+import {
+  extractGoogleDriveId,
+  isGoogleDriveUrl,
+  getPdfPreviewUrl,
+  getPdfDownloadUrl,
+} from "@/lib/drive-utils";
+import {
+  Check,
+  Sun,
+  Moon,
+  Cloud,
+  CloudUpload,
+  RefreshCw,
+  ExternalLink,
+  Download,
+  FileText,
+} from "lucide-react";
 
 const TITLE = "Admin Console — Portfolio Content Management";
 
@@ -156,7 +172,7 @@ function LoginGate({ onPass }: { onPass: () => void }) {
 
 /* ------------------------------ CONSOLE ------------------------------ */
 
-const TABS = ["Content", "Projects", "Appearance", "Sections", "Contact"] as const;
+const TABS = ["Content", "Projects", "Certificates", "Appearance", "Sections", "Contact"] as const;
 type Tab = (typeof TABS)[number];
 
 function Field({
@@ -194,7 +210,8 @@ function Field({
 const STATUSES: ProjectStatus[] = ["Production", "In Development", "Maintained", "Archived"];
 
 function Console({ onExit }: { onExit: () => void }) {
-  const { content, update, reset } = usePortfolio();
+  const { content, update, reset, cloudSyncStatus, lastSyncedAt, syncToCloud, pullFromCloud } =
+    usePortfolio();
   const { mode: themeMode, toggle: toggleMode } = useThemeMode();
   const [tab, setTab] = useState<Tab>("Content");
   const [saved, setSaved] = useState(false);
@@ -202,6 +219,8 @@ function Console({ onExit }: { onExit: () => void }) {
   function flash() {
     setSaved(true);
     window.setTimeout(() => setSaved(false), 1600);
+    // Automatically sync updates to JSONBin Cloud
+    syncToCloud();
   }
 
   function patchProject(id: string, patch: Partial<Project>) {
@@ -244,6 +263,44 @@ function Console({ onExit }: { onExit: () => void }) {
     flash();
   }
 
+  function patchCertificate(id: string, patch: Partial<Certificate>) {
+    update((c) => ({
+      ...c,
+      certificates: (c.certificates || []).map((item) =>
+        item.id === id ? { ...item, ...patch } : item,
+      ),
+    }));
+  }
+
+  function addCertificate() {
+    const id = `cert-${Date.now()}`;
+    update((c) => ({
+      ...c,
+      certificates: [
+        {
+          id,
+          title: "New Certification",
+          issuer: "Issuing Organization",
+          date: "JAN 2026",
+          fileUrl: "",
+          thumbUrl: "",
+          skills: "DevOps, Kubernetes",
+          achievement: "",
+        },
+        ...(c.certificates || []),
+      ],
+    }));
+    flash();
+  }
+
+  function removeCertificate(id: string) {
+    update((c) => ({
+      ...c,
+      certificates: (c.certificates || []).filter((item) => item.id !== id),
+    }));
+    flash();
+  }
+
   function setSetting<K extends keyof SiteSettings>(key: K, value: SiteSettings[K]) {
     update((c) => ({ ...c, settings: { ...c.settings, [key]: value } }));
   }
@@ -265,7 +322,65 @@ function Console({ onExit }: { onExit: () => void }) {
             <p className="truncate text-sm">Portfolio content management</p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            {saved ? <span className="label-xs text-signal">SAVED</span> : null}
+            {/* Cloud Sync Status Indicator */}
+            <div
+              className="hidden sm:flex items-center gap-1.5 border border-border bg-surface px-2.5 py-1.5 text-xs"
+              title={
+                lastSyncedAt
+                  ? `Last synced with JSONBin: ${lastSyncedAt.toLocaleTimeString()}`
+                  : "JSONBin Cloud Sync"
+              }
+            >
+              <Cloud className="h-3.5 w-3.5 text-primary" />
+              <span className="label-xs text-muted-foreground">CLOUD:</span>
+              <span
+                className={`label-xs font-bold ${
+                  cloudSyncStatus === "saving"
+                    ? "text-accent animate-pulse"
+                    : cloudSyncStatus === "synced"
+                      ? "text-signal"
+                      : cloudSyncStatus === "error"
+                        ? "text-destructive"
+                        : "text-muted-foreground"
+                }`}
+              >
+                {cloudSyncStatus === "saving"
+                  ? "SYNCING..."
+                  : cloudSyncStatus === "synced"
+                    ? "LIVE (JSONBIN) ✓"
+                    : cloudSyncStatus === "error"
+                      ? "SYNC FAILED"
+                      : "CONNECTED"}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={async () => {
+                const ok = await syncToCloud();
+                if (ok) flash();
+              }}
+              disabled={cloudSyncStatus === "saving"}
+              className="label-xs inline-flex items-center gap-1.5 border border-primary bg-primary/10 px-3 py-2 text-primary hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer"
+              title="Publish all changes to JSONBin Cloud so visitors see them instantly"
+            >
+              <CloudUpload className="h-3.5 w-3.5" />
+              <span>PUBLISH CLOUD</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={async () => {
+                const ok = await pullFromCloud();
+                if (ok) flash();
+              }}
+              className="label-xs border border-border px-2.5 py-2 text-muted-foreground hover:text-foreground cursor-pointer"
+              title="Pull latest live data from JSONBin Cloud"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+            </button>
+
+            {saved ? <span className="label-xs text-signal font-bold">SAVED</span> : null}
             <Link
               to="/"
               className="label-xs border border-border px-3 py-2 hover:border-foreground"
@@ -274,7 +389,7 @@ function Console({ onExit }: { onExit: () => void }) {
             </Link>
             <button
               onClick={onExit}
-              className="label-xs border border-border px-3 py-2 hover:border-destructive hover:text-destructive"
+              className="label-xs border border-border px-3 py-2 hover:border-destructive hover:text-destructive cursor-pointer"
             >
               Lock
             </button>
@@ -298,9 +413,10 @@ function Console({ onExit }: { onExit: () => void }) {
       </header>
 
       <div className="mx-auto max-w-[1200px] px-4 py-8 sm:px-6">
-        <p className="label-xs mb-8 border border-accent px-4 py-3 leading-relaxed text-accent">
-          Warning — content management area. Changes save to this browser only and take effect
-          immediately on the public site view.
+        <p className="label-xs mb-8 border border-signal/60 bg-signal/5 px-4 py-3 leading-relaxed text-signal">
+          ✓ Cloud Connected — All changes automatically publish to JSONBin.io cloud &amp; local
+          storage. Deployed visitors will immediately see your updates, projects, certificates, and
+          active theme.
         </p>
 
         {tab === "Content" && (
@@ -536,6 +652,162 @@ function Console({ onExit }: { onExit: () => void }) {
                 </div>
               </details>
             ))}
+          </div>
+        )}
+
+        {tab === "Certificates" && (
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 border border-border-strong bg-card p-5">
+              <div>
+                <span className="label-xs text-primary font-bold">CREDENTIALS ENGINE</span>
+                <h2 className="mt-1 text-lg font-bold uppercase tracking-tight">
+                  Certificates & Credentials Management
+                </h2>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Paste Google Drive file links, direct PDF links, or local paths. Google Drive
+                  links automatically convert to embed previewers and direct downloads!
+                </p>
+              </div>
+              <button
+                onClick={addCertificate}
+                className="label-xs inline-flex items-center gap-1.5 border border-primary bg-primary px-5 py-3 text-primary-foreground font-bold hover:-translate-y-0.5 transition-transform cursor-pointer"
+              >
+                + Add Certificate
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {(content.certificates || []).map((cert, idx) => {
+                const isDrive = isGoogleDriveUrl(cert.fileUrl);
+                const driveId = extractGoogleDriveId(cert.fileUrl);
+                const previewUrl = getPdfPreviewUrl(cert.fileUrl);
+                const downloadUrl = getPdfDownloadUrl(cert.fileUrl);
+
+                return (
+                  <details
+                    key={cert.id}
+                    className="border border-border-strong bg-card transition-all"
+                    open={idx === 0}
+                  >
+                    <summary className="grid cursor-pointer grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-3 hover:bg-surface">
+                      <div className="flex items-center gap-2 truncate">
+                        <FileText className="h-4 w-4 shrink-0 text-primary" />
+                        <span className="truncate text-sm font-semibold">
+                          {cert.title || "Untitled Certificate"}
+                        </span>
+                        {isDrive && (
+                          <span className="label-xs border border-accent/40 bg-accent/10 px-1.5 py-0.5 text-accent">
+                            GOOGLE DRIVE
+                          </span>
+                        )}
+                      </div>
+                      <span className="label-xs shrink-0 text-muted-foreground">
+                        {cert.date || "NO DATE"}
+                      </span>
+                    </summary>
+
+                    <div className="grid gap-4 p-4 md:grid-cols-2">
+                      <Field
+                        label="Certificate Title"
+                        value={cert.title}
+                        onChange={(v) => patchCertificate(cert.id, { title: v })}
+                      />
+                      <Field
+                        label="Issuing Organization"
+                        value={cert.issuer}
+                        onChange={(v) => patchCertificate(cert.id, { issuer: v })}
+                      />
+                      <Field
+                        label="Issue Date (e.g. FEB 2026)"
+                        value={cert.date}
+                        onChange={(v) => patchCertificate(cert.id, { date: v })}
+                      />
+                      <Field
+                        label="Skills (comma separated, e.g. Kubernetes, AWS, Go)"
+                        value={cert.skills ?? ""}
+                        onChange={(v) => patchCertificate(cert.id, { skills: v })}
+                      />
+
+                      <div className="md:col-span-2">
+                        <Field
+                          label="File URL (Google Drive link or /certificates/name.pdf)"
+                          value={cert.fileUrl}
+                          onChange={(v) => patchCertificate(cert.id, { fileUrl: v })}
+                        />
+
+                        {/* Google Drive Detection & Test Pill */}
+                        {isDrive && (
+                          <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 border border-accent/40 bg-accent/5 p-3 text-xs">
+                            <div className="flex items-center gap-2">
+                              <span className="label-xs text-accent font-bold">
+                                ✓ GOOGLE DRIVE LINK DETECTED
+                              </span>
+                              <span className="text-[11px] text-muted-foreground font-mono">
+                                (File ID: {driveId})
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <a
+                                href={previewUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="label-xs inline-flex items-center gap-1 border border-border bg-background px-2.5 py-1 text-foreground hover:border-accent hover:text-accent"
+                              >
+                                <ExternalLink className="h-3 w-3" />
+                                <span>Test Preview ↗</span>
+                              </a>
+                              <a
+                                href={downloadUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                download
+                                className="label-xs inline-flex items-center gap-1 border border-border bg-background px-2.5 py-1 text-foreground hover:border-accent hover:text-accent"
+                              >
+                                <Download className="h-3 w-3" />
+                                <span>Test Download ⤓</span>
+                              </a>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <Field
+                          label="Thumbnail Image URL (Optional preview image, e.g. /certificates/thumb.png)"
+                          value={cert.thumbUrl ?? ""}
+                          onChange={(v) => patchCertificate(cert.id, { thumbUrl: v })}
+                        />
+                      </div>
+
+                      <div className="md:col-span-2">
+                        <Field
+                          label="Achievement / Note (Optional highlight)"
+                          value={cert.achievement ?? ""}
+                          onChange={(v) => patchCertificate(cert.id, { achievement: v })}
+                        />
+                      </div>
+
+                      <div className="md:col-span-2 flex flex-wrap gap-3 border-t border-border pt-4">
+                        <button
+                          type="button"
+                          onClick={flash}
+                          className="label-xs border border-primary bg-primary px-5 py-3 text-primary-foreground font-bold cursor-pointer"
+                        >
+                          Save Certificate
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeCertificate(cert.id)}
+                          className="label-xs border border-destructive px-5 py-3 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors cursor-pointer"
+                        >
+                          Remove Certificate
+                        </button>
+                      </div>
+                    </div>
+                  </details>
+                );
+              })}
+            </div>
           </div>
         )}
 

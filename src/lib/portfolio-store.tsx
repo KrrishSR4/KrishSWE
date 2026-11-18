@@ -13,6 +13,7 @@ import {
   type ThemeId,
   type FontId,
 } from "./portfolio-data";
+import { fetchRemoteContent, saveRemoteContent, type SyncStatus } from "./jsonbin-sync";
 
 const STORAGE_KEY = "portfolio.content.v10";
 
@@ -47,8 +48,12 @@ function merge(stored: unknown): PortfolioContent {
 interface Store {
   content: PortfolioContent;
   hydrated: boolean;
+  cloudSyncStatus: SyncStatus;
+  lastSyncedAt: Date | null;
   update: (updater: (draft: PortfolioContent) => PortfolioContent) => void;
   reset: () => void;
+  syncToCloud: (overrideContent?: PortfolioContent) => Promise<boolean>;
+  pullFromCloud: () => Promise<boolean>;
 }
 
 const PortfolioContext = createContext<Store | null>(null);
@@ -56,15 +61,45 @@ const PortfolioContext = createContext<Store | null>(null);
 export function PortfolioProvider({ children }: { children: ReactNode }) {
   const [content, setContent] = useState<PortfolioContent>(DEFAULT_CONTENT);
   const [hydrated, setHydrated] = useState(false);
+  const [cloudSyncStatus, setCloudSyncStatus] = useState<SyncStatus>("idle");
+  const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
 
+  // 1. Initial hydration: Load from localStorage first, then sync with JSONBin cloud
   useEffect(() => {
+    let active = true;
+
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setContent(merge(JSON.parse(raw)));
+      if (raw) {
+        setContent(merge(JSON.parse(raw)));
+      }
     } catch {
-      /* ignore corrupt payloads */
+      /* ignore corrupt local payloads */
     }
     setHydrated(true);
+
+    // 2. Fetch fresh content from JSONBin so deployed visitors immediately get latest updates
+    setCloudSyncStatus("fetching");
+    fetchRemoteContent().then((remoteData) => {
+      if (!active) return;
+      if (remoteData) {
+        const merged = merge(remoteData);
+        setContent(merged);
+        try {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+        } catch {
+          /* storage full or unavailable */
+        }
+        setCloudSyncStatus("synced");
+        setLastSyncedAt(new Date());
+      } else {
+        setCloudSyncStatus("idle");
+      }
+    });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const update = useCallback((updater: (draft: PortfolioContent) => PortfolioContent) => {
@@ -88,6 +123,43 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     setContent(DEFAULT_CONTENT);
   }, []);
 
+  const syncToCloud = useCallback(
+    async (overrideContent?: PortfolioContent) => {
+      const payload = overrideContent ?? content;
+      setCloudSyncStatus("saving");
+      const res = await saveRemoteContent(payload);
+      if (res.success) {
+        setCloudSyncStatus("synced");
+        setLastSyncedAt(new Date());
+        return true;
+      } else {
+        setCloudSyncStatus("error");
+        return false;
+      }
+    },
+    [content],
+  );
+
+  const pullFromCloud = useCallback(async () => {
+    setCloudSyncStatus("fetching");
+    const remoteData = await fetchRemoteContent();
+    if (remoteData) {
+      const merged = merge(remoteData);
+      setContent(merged);
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+      } catch {
+        /* storage unavailable */
+      }
+      setCloudSyncStatus("synced");
+      setLastSyncedAt(new Date());
+      return true;
+    } else {
+      setCloudSyncStatus("error");
+      return false;
+    }
+  }, []);
+
   useEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
@@ -105,8 +177,17 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   }, [content.settings.theme, content.settings.font, content.settings.density]);
 
   const value = useMemo(
-    () => ({ content, hydrated, update, reset }),
-    [content, hydrated, update, reset],
+    () => ({
+      content,
+      hydrated,
+      cloudSyncStatus,
+      lastSyncedAt,
+      update,
+      reset,
+      syncToCloud,
+      pullFromCloud,
+    }),
+    [content, hydrated, cloudSyncStatus, lastSyncedAt, update, reset, syncToCloud, pullFromCloud],
   );
 
   return <PortfolioContext.Provider value={value}>{children}</PortfolioContext.Provider>;
