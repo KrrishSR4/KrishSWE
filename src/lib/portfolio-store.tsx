@@ -7,13 +7,29 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { DEFAULT_CONTENT, type PortfolioContent } from "./portfolio-data";
+import {
+  DEFAULT_CONTENT,
+  type PortfolioContent,
+  type ThemeId,
+  type FontId,
+} from "./portfolio-data";
 
 const STORAGE_KEY = "portfolio.content.v10";
+
+const VALID_THEMES: ThemeId[] = ["void", "signal", "ember", "cobalt", "amethyst", "paper"];
+const VALID_FONTS: FontId[] = ["jetbrains", "ibm", "archivo", "jakarta", "fira", "inter"];
 
 function merge(stored: unknown): PortfolioContent {
   if (!stored || typeof stored !== "object") return DEFAULT_CONTENT;
   const s = stored as Partial<PortfolioContent>;
+  const settings = { ...DEFAULT_CONTENT.settings, ...(s.settings ?? {}) };
+  if (!VALID_THEMES.includes(settings.theme)) {
+    settings.theme = "void";
+  }
+  if (!VALID_FONTS.includes(settings.font)) {
+    settings.font = "jetbrains";
+  }
+
   return {
     identity: { ...DEFAULT_CONTENT.identity, ...(s.identity ?? {}) },
     contact: { ...DEFAULT_CONTENT.contact, ...(s.contact ?? {}) },
@@ -24,7 +40,7 @@ function merge(stored: unknown): PortfolioContent {
     focus: s.focus ?? DEFAULT_CONTENT.focus,
     repos: s.repos ?? DEFAULT_CONTENT.repos,
     certificates: s.certificates ?? DEFAULT_CONTENT.certificates,
-    settings: { ...DEFAULT_CONTENT.settings, ...(s.settings ?? {}) },
+    settings,
   };
 }
 
@@ -71,6 +87,22 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     }
     setContent(DEFAULT_CONTENT);
   }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    VALID_THEMES.forEach((t) => root.classList.remove(`theme-${t}`));
+    VALID_FONTS.forEach((f) => root.classList.remove(`font-${f}`));
+    ["density-compact", "density-normal", "density-spacious"].forEach((d) =>
+      root.classList.remove(d),
+    );
+
+    root.classList.add(
+      `theme-${content.settings.theme}`,
+      `font-${content.settings.font}`,
+      `density-${content.settings.density}`,
+    );
+  }, [content.settings.theme, content.settings.font, content.settings.density]);
 
   const value = useMemo(
     () => ({ content, hydrated, update, reset }),

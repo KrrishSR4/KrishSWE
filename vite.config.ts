@@ -18,7 +18,10 @@ export default defineConfig({
           if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/")) {
             return "vendor";
           }
-          if (id.includes("node_modules/@tanstack/react-router/") || id.includes("node_modules/@tanstack/react-query/")) {
+          if (
+            id.includes("node_modules/@tanstack/react-router/") ||
+            id.includes("node_modules/@tanstack/react-query/")
+          ) {
             return "router";
           }
           if (id.includes("node_modules/gsap/")) {

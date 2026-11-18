@@ -21,7 +21,7 @@ function RecentActivity({ handle }: { handle: string }) {
       const events = (await res.json()) as GithubEvent[];
       return events
         .filter((e) =>
-          ["PushEvent", "IssuesEvent", "PullRequestEvent", "CreateEvent"].includes(e.type)
+          ["PushEvent", "IssuesEvent", "PullRequestEvent", "CreateEvent"].includes(e.type),
         )
         .slice(0, 3);
     },
@@ -84,9 +84,7 @@ function GitHubLanguageBar() {
         <span className="inline-block px-2 py-0.5 text-xs font-mono font-bold uppercase tracking-wider bg-primary text-primary-foreground border border-primary">
           PROGRAMMING LANGUAGES
         </span>
-        <span className="text-xs font-mono text-muted-foreground opacity-70">
-          05
-        </span>
+        <span className="text-xs font-mono text-muted-foreground opacity-70">05</span>
       </div>
       <div className="flex flex-1 flex-col justify-center p-4 sm:p-6 bg-background">
         <div className="flex h-2.5 w-full overflow-hidden rounded-full border border-border-strong">
@@ -102,12 +100,13 @@ function GitHubLanguageBar() {
         <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
           {GITHUB_LANGUAGES.map((lang) => (
             <div key={lang.name} className="flex items-center gap-2">
-              <span
-                className="h-2.5 w-2.5 rounded-full"
-                style={{ backgroundColor: lang.color }}
-              />
-              <span className="text-[0.82rem] font-bold text-foreground/90 tracking-tight">{lang.name}</span>
-              <span className="text-[0.82rem] font-medium text-muted-foreground">{lang.percent}%</span>
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: lang.color }} />
+              <span className="text-[0.82rem] font-bold text-foreground/90 tracking-tight">
+                {lang.name}
+              </span>
+              <span className="text-[0.82rem] font-medium text-muted-foreground">
+                {lang.percent}%
+              </span>
             </div>
           ))}
         </div>

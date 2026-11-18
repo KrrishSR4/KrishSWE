@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { usePortfolio, useShellClass } from "@/lib/portfolio-store";
 import type { Project, ProjectStatus, SiteSettings } from "@/lib/portfolio-data";
-import { SECTION_LABELS } from "@/lib/portfolio-data";
+import { SECTION_LABELS, THEMES_METADATA, FONTS_METADATA } from "@/lib/portfolio-data";
+import { useThemeMode } from "@/lib/theme-mode";
+import { Check, Sun, Moon } from "lucide-react";
 
 const TITLE = "Admin Console — Portfolio Content Management";
 
@@ -193,6 +195,7 @@ const STATUSES: ProjectStatus[] = ["Production", "In Development", "Maintained",
 
 function Console({ onExit }: { onExit: () => void }) {
   const { content, update, reset } = usePortfolio();
+  const { mode: themeMode, toggle: toggleMode } = useThemeMode();
   const [tab, setTab] = useState<Tab>("Content");
   const [saved, setSaved] = useState(false);
 
@@ -537,59 +540,369 @@ function Console({ onExit }: { onExit: () => void }) {
         )}
 
         {tab === "Appearance" && (
-          <div className="grid gap-8">
-            <div>
-              <span className="label-xs text-muted-foreground">Theme</span>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {(["void", "signal", "ember", "paper"] as const).map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setSetting("theme", t)}
-                    className={`label-xs border px-4 py-3 ${
-                      content.settings.theme === t
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border"
-                    }`}
-                  >
-                    {t}
-                  </button>
-                ))}
+          <div className="flex flex-col gap-10">
+            {/* Header info bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 border border-border-strong bg-card p-5">
+              <div>
+                <span className="label-xs text-primary font-bold">SYSTEM // APPEARANCE ENGINE</span>
+                <h2 className="mt-1 text-lg font-bold uppercase tracking-tight">
+                  Themes & Typography Studio
+                </h2>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Switch between 6 distinct production themes and curated fonting systems. Changes
+                  reflect live across all routes.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2 border border-border bg-surface px-3 py-2">
+                  <span className="label-xs text-muted-foreground">ACTIVE:</span>
+                  <span className="label-xs text-primary font-bold uppercase">
+                    {content.settings.theme}
+                  </span>
+                  <span className="text-muted-foreground">/</span>
+                  <span className="label-xs text-foreground uppercase">
+                    {content.settings.font}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={toggleMode}
+                  className="label-xs inline-flex items-center gap-2 border border-border bg-surface px-3 py-2 text-foreground transition-colors hover:border-primary hover:text-primary cursor-pointer"
+                  title="Toggle Light / Dark mode"
+                >
+                  {themeMode === "light" ? (
+                    <>
+                      <Sun className="h-3.5 w-3.5 text-accent" />
+                      <span>LIGHT MODE</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon className="h-3.5 w-3.5 text-primary" />
+                      <span>DARK MODE</span>
+                    </>
+                  )}
+                </button>
               </div>
             </div>
+
+            {/* Section 1: 6 Themes */}
             <div>
-              <span className="label-xs text-muted-foreground">Typeface</span>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {(["jetbrains", "ibm", "archivo"] as const).map((f) => (
-                  <button
-                    key={f}
-                    onClick={() => setSetting("font", f)}
-                    className={`label-xs border px-4 py-3 ${
-                      content.settings.font === f
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border"
-                    }`}
-                  >
-                    {f}
-                  </button>
-                ))}
+              <div className="mb-4 flex items-baseline justify-between border-b border-border pb-2">
+                <div>
+                  <span className="label-xs text-primary">01 / COLOR SYSTEMS</span>
+                  <h3 className="text-base font-bold uppercase tracking-tight">
+                    Select Portfolio Theme (6 Options)
+                  </h3>
+                </div>
+                <span className="label-xs text-muted-foreground">OKLCH Brutalist Tokens</span>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {THEMES_METADATA.map((t, idx) => {
+                  const isCurrent = content.settings.theme === t.id;
+                  return (
+                    <div
+                      key={t.id}
+                      className={`group relative flex flex-col justify-between border transition-all ${
+                        isCurrent
+                          ? "border-primary bg-card ring-1 ring-primary shadow-lg"
+                          : "border-border bg-card/60 hover:border-border-strong hover:bg-card"
+                      }`}
+                    >
+                      <div className="p-4 sm:p-5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="label-xs text-muted-foreground">
+                            0{idx + 1} · {t.category}
+                          </span>
+                          {isCurrent ? (
+                            <span className="label-xs inline-flex items-center gap-1 border border-primary bg-primary px-2 py-0.5 text-primary-foreground font-bold">
+                              <Check className="h-3 w-3" /> ACTIVE
+                            </span>
+                          ) : (
+                            <span className="label-xs text-muted-foreground uppercase">PRESET</span>
+                          )}
+                        </div>
+
+                        <h4 className="mt-3 text-base font-bold uppercase tracking-tight text-foreground">
+                          {t.name}
+                        </h4>
+                        <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                          {t.tagline}
+                        </p>
+
+                        {/* Swatches Bar */}
+                        <div className="mt-4 flex items-center gap-1.5 border border-border bg-surface p-2">
+                          <span
+                            className="h-5 w-8 border border-white/20"
+                            style={{ backgroundColor: t.previewColors.bg }}
+                            title="Background"
+                          />
+                          <span
+                            className="h-5 w-6 border border-white/20"
+                            style={{ backgroundColor: t.previewColors.card }}
+                            title="Card Surface"
+                          />
+                          <span
+                            className="h-5 flex-1 border border-black/20 shadow-sm"
+                            style={{ backgroundColor: t.previewColors.primary }}
+                            title="Primary Accent"
+                          />
+                          <span
+                            className="h-5 w-6 border border-black/20"
+                            style={{ backgroundColor: t.previewColors.accent }}
+                            title="Secondary Accent"
+                          />
+                          <span
+                            className="h-5 w-6 border border-black/20"
+                            style={{ backgroundColor: t.previewColors.signal }}
+                            title="Signal Indicator"
+                          />
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-between text-[0.7rem] text-muted-foreground">
+                          <span>Pairing:</span>
+                          <span className="font-mono text-foreground font-semibold">
+                            {t.recommendedFont}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 border-t border-border bg-surface">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSetting("theme", t.id);
+                            flash();
+                          }}
+                          className={`label-xs px-3 py-3 text-center transition-colors cursor-pointer ${
+                            isCurrent
+                              ? "bg-primary text-primary-foreground font-bold"
+                              : "hover:bg-primary/10 hover:text-foreground"
+                          }`}
+                        >
+                          {isCurrent ? "Active" : "Apply Theme"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            update((c) => ({
+                              ...c,
+                              settings: {
+                                ...c.settings,
+                                theme: t.id,
+                                font: t.recommendedFont,
+                              },
+                            }));
+                            flash();
+                          }}
+                          className="label-xs border-l border-border px-3 py-3 text-center text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground cursor-pointer"
+                          title={`Apply ${t.name} and recommended font ${t.recommendedFont}`}
+                        >
+                          + Auto Font
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
+
+            {/* Section 2: 6 Curated Fontings */}
             <div>
-              <span className="label-xs text-muted-foreground">Layout density</span>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {(["compact", "normal", "spacious"] as const).map((d) => (
-                  <button
-                    key={d}
-                    onClick={() => setSetting("density", d)}
-                    className={`label-xs border px-4 py-3 ${
-                      content.settings.density === d
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border"
-                    }`}
-                  >
-                    {d}
-                  </button>
-                ))}
+              <div className="mb-4 flex items-baseline justify-between border-b border-border pb-2">
+                <div>
+                  <span className="label-xs text-primary">02 / TYPOGRAPHY MATRIX</span>
+                  <h3 className="text-base font-bold uppercase tracking-tight">
+                    Curated Typeface Pairings (Display + Monospace)
+                  </h3>
+                </div>
+                <span className="label-xs text-muted-foreground">Google Fonts High-Resolution</span>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {FONTS_METADATA.map((f, idx) => {
+                  const isCurrent = content.settings.font === f.id;
+                  return (
+                    <div
+                      key={f.id}
+                      className={`group flex flex-col justify-between border font-${f.id} transition-all ${
+                        isCurrent
+                          ? "border-primary bg-card ring-1 ring-primary shadow-lg"
+                          : "border-border bg-card/60 hover:border-border-strong hover:bg-card"
+                      }`}
+                    >
+                      <div className="p-4 sm:p-5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="label-xs text-muted-foreground">FONT // 0{idx + 1}</span>
+                          <span className="label-xs border border-border px-1.5 py-0.5 text-accent">
+                            {f.styleLabel}
+                          </span>
+                        </div>
+
+                        <h4 className="mt-3 text-base font-bold uppercase tracking-tight text-foreground">
+                          {f.name}
+                        </h4>
+
+                        <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                          <div className="flex justify-between">
+                            <span>Display / Heading:</span>
+                            <span className="text-foreground font-semibold">{f.display}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Code / Body:</span>
+                            <span className="text-foreground font-semibold font-mono">
+                              {f.mono}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Live Typo Sample Box */}
+                        <div className="mt-4 border border-border bg-surface p-3">
+                          <div className="text-sm font-bold uppercase tracking-tight text-foreground">
+                            AaBbCc 0123
+                          </div>
+                          <div className="mt-1 text-[0.75rem] font-mono text-muted-foreground truncate">
+                            {f.sampleText}
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSetting("font", f.id);
+                          flash();
+                        }}
+                        className={`label-xs border-t border-border px-4 py-3 text-center transition-colors cursor-pointer ${
+                          isCurrent
+                            ? "bg-primary text-primary-foreground font-bold"
+                            : "bg-surface hover:bg-primary/10 hover:text-foreground"
+                        }`}
+                      >
+                        {isCurrent ? "✓ Active Fonting" : "Apply Typeface"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Section 3: Layout Density */}
+            <div>
+              <div className="mb-4 flex items-baseline justify-between border-b border-border pb-2">
+                <div>
+                  <span className="label-xs text-primary">03 / DENSITY & SPACING</span>
+                  <h3 className="text-base font-bold uppercase tracking-tight">
+                    Layout Density Mode
+                  </h3>
+                </div>
+                <span className="label-xs text-muted-foreground">Grid Spacing</span>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-3">
+                {[
+                  {
+                    id: "compact",
+                    label: "Compact",
+                    desc: "Dense telemetry, 3.5rem vertical padding. Best for information-dense review.",
+                  },
+                  {
+                    id: "normal",
+                    label: "Normal (Recommended)",
+                    desc: "Standard engineering balance, 6rem vertical padding. Optimal readability.",
+                  },
+                  {
+                    id: "spacious",
+                    label: "Spacious",
+                    desc: "Airy architectural rhythm, 9rem vertical padding. Impact presentation.",
+                  },
+                ].map((d) => {
+                  const isCurrent = content.settings.density === d.id;
+                  return (
+                    <button
+                      key={d.id}
+                      type="button"
+                      onClick={() => {
+                        setSetting("density", d.id as SiteSettings["density"]);
+                        flash();
+                      }}
+                      className={`flex flex-col text-left p-4 border transition-all cursor-pointer ${
+                        isCurrent
+                          ? "border-primary bg-card ring-1 ring-primary"
+                          : "border-border bg-surface hover:border-border-strong hover:bg-card"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <span className="label-xs font-bold uppercase text-foreground">
+                          {d.label}
+                        </span>
+                        {isCurrent ? (
+                          <span className="label-xs text-primary font-bold">ACTIVE</span>
+                        ) : null}
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{d.desc}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Section 4: Live Interactive Sandbox Preview */}
+            <div className="border border-border-strong bg-card p-6">
+              <div className="flex items-center justify-between border-b border-border pb-3">
+                <div>
+                  <span className="label-xs text-primary">04 / LIVE COMPONENT SANDBOX</span>
+                  <h3 className="text-base font-bold uppercase tracking-tight">
+                    Theme & Typography Live Verification
+                  </h3>
+                </div>
+                <span className="label-xs border border-border px-2 py-1 text-muted-foreground">
+                  theme-{content.settings.theme} · font-{content.settings.font}
+                </span>
+              </div>
+
+              <div className="mt-6 space-y-6">
+                <div>
+                  <span className="label-xs text-muted-foreground tracking-widest uppercase">
+                    Preview // Hero Heading
+                  </span>
+                  <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-foreground">
+                    Krish Mishra · <span className="text-primary">DevOps & Cloud SRE</span>
+                  </h2>
+                  <p className="mt-2 max-w-2xl text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                    Building resilient, zero-downtime distributed platforms across AWS, GCP, and
+                    Kubernetes clusters with automated CI/CD and observability.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="label-xs border border-primary bg-primary px-3 py-1.5 text-primary-foreground font-bold">
+                    Primary Button
+                  </span>
+                  <span className="label-xs border border-border-strong bg-surface px-3 py-1.5 text-foreground hover:border-foreground">
+                    Secondary Button
+                  </span>
+                  <span className="label-xs border border-accent text-accent px-3 py-1.5">
+                    Accent Badge
+                  </span>
+                  <span className="label-xs border border-signal text-signal px-3 py-1.5">
+                    ● Production Online
+                  </span>
+                </div>
+
+                {/* Code block sample */}
+                <div className="border border-border bg-background p-3 text-xs font-mono">
+                  <div className="flex items-center justify-between border-b border-border pb-2 text-muted-foreground">
+                    <span>bash - deploy-pipeline.sh</span>
+                    <span className="text-signal">STATUS: 200 OK</span>
+                  </div>
+                  <pre className="mt-2 text-foreground overflow-x-auto">
+                    <code>{`$ terraform apply -auto-approve
+module.eks_cluster.status: Creating... [45s elapsed]
+module.eks_cluster.status: Creation complete after 3m12s [id=krish-prod-cluster]
+✓ Zero-downtime rolling update deployed successfully`}</code>
+                  </pre>
+                </div>
               </div>
             </div>
           </div>

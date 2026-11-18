@@ -90,6 +90,66 @@
   --foreground: oklch(0.965 0.002 285);
 }
 
+/* ------------------------------------------------------------
+ * 6 Themes System for Krish Mishra Portfolio
+ * 1. void    - Terminal Acid Obsidian (Lime / Black)
+ * 2. signal  - Cyber Emerald / Observability (Mint / Teal / Sapphire)
+ * 3. ember   - Molten Rust / Solaris / Magma Ops (Flame Amber / Deep Ash)
+ * 4. cobalt  - Cloud Native / Kubernetes Ocean (Electric Azure / Deep Blue)
+ * 5. amethyst- Quantum AI / Synthwave Violet (Electric Purple / Magenta)
+ * 6. paper   - Swiss Architectural Monolith (Ink Black / Alabaster Paper)
+ * ------------------------------------------------------------ */
+
+.theme-void {
+  --primary: oklch(0.9 0.19 118);
+  --primary-foreground: oklch(0.16 0.02 118);
+  --ring: oklch(0.9 0.19 118);
+  --accent: oklch(0.72 0.16 45);
+  --accent-foreground: oklch(0.16 0.02 45);
+  --signal: oklch(0.78 0.15 165);
+  --signal-foreground: oklch(0.16 0.02 165);
+}
+
+.theme-signal {
+  --primary: oklch(0.8 0.16 168);
+  --primary-foreground: oklch(0.15 0.03 168);
+  --ring: oklch(0.8 0.16 168);
+  --accent: oklch(0.72 0.16 240);
+  --accent-foreground: oklch(0.15 0.03 240);
+  --signal: oklch(0.85 0.18 150);
+  --signal-foreground: oklch(0.15 0.03 150);
+}
+
+.theme-ember {
+  --primary: oklch(0.75 0.19 50);
+  --primary-foreground: oklch(0.16 0.02 50);
+  --ring: oklch(0.75 0.19 50);
+  --accent: oklch(0.85 0.16 85);
+  --accent-foreground: oklch(0.16 0.02 85);
+  --signal: oklch(0.72 0.2 25);
+  --signal-foreground: oklch(0.16 0.02 25);
+}
+
+.theme-cobalt {
+  --primary: oklch(0.74 0.18 235);
+  --primary-foreground: oklch(0.15 0.03 235);
+  --ring: oklch(0.74 0.18 235);
+  --accent: oklch(0.8 0.14 195);
+  --accent-foreground: oklch(0.15 0.03 195);
+  --signal: oklch(0.78 0.16 150);
+  --signal-foreground: oklch(0.15 0.03 150);
+}
+
+.theme-amethyst {
+  --primary: oklch(0.76 0.22 315);
+  --primary-foreground: oklch(0.15 0.03 315);
+  --ring: oklch(0.76 0.22 315);
+  --accent: oklch(0.78 0.16 200);
+  --accent-foreground: oklch(0.15 0.03 200);
+  --signal: oklch(0.78 0.2 345);
+  --signal-foreground: oklch(0.15 0.03 345);
+}
+
 /* Light inversion used by the admin "paper" theme option */
 .theme-paper {
   --background: oklch(0.97 0.004 95);
@@ -100,7 +160,7 @@
   --card-foreground: oklch(0.18 0.006 285);
   --popover: oklch(0.99 0.003 95);
   --popover-foreground: oklch(0.18 0.006 285);
-  --primary: oklch(0.22 0.006 285);
+  --primary: oklch(0.2 0.006 285);
   --primary-foreground: oklch(0.98 0.003 95);
   --secondary: oklch(0.92 0.005 95);
   --secondary-foreground: oklch(0.2 0.006 285);
@@ -108,26 +168,12 @@
   --muted-foreground: oklch(0.44 0.008 285);
   --accent: oklch(0.55 0.18 30);
   --accent-foreground: oklch(0.98 0.003 95);
-  --signal: oklch(0.5 0.13 165);
+  --signal: oklch(0.48 0.14 165);
   --signal-foreground: oklch(0.98 0.003 95);
-  --border: oklch(0.2 0.006 285);
+  --border: oklch(0.78 0.006 285);
   --border-strong: oklch(0.18 0.006 285);
-  --input: oklch(0.2 0.006 285);
-  --ring: oklch(0.22 0.006 285);
-}
-
-.theme-signal {
-  --primary: oklch(0.78 0.15 165);
-  --primary-foreground: oklch(0.15 0.02 165);
-  --ring: oklch(0.78 0.15 165);
-  --accent: oklch(0.72 0.16 250);
-}
-
-.theme-ember {
-  --primary: oklch(0.72 0.19 45);
-  --primary-foreground: oklch(0.16 0.02 45);
-  --ring: oklch(0.72 0.19 45);
-  --accent: oklch(0.85 0.16 90);
+  --input: oklch(0.78 0.006 285);
+  --ring: oklch(0.2 0.006 285);
 }
 
 /* Global light mode (nav toggle). Applied on <html>. */
@@ -157,26 +203,58 @@
   --ring: oklch(0.52 0.16 145);
   color-scheme: light;
 }
-.mode-light .theme-signal {
-  --primary: oklch(0.5 0.13 165);
-  --primary-foreground: oklch(0.98 0.003 95);
-  --ring: oklch(0.5 0.13 165);
-  --accent: oklch(0.5 0.16 250);
+
+.mode-light .theme-void,
+.theme-void.mode-light {
+  --primary: oklch(0.52 0.16 145);
+  --primary-foreground: oklch(0.99 0.003 95);
+  --ring: oklch(0.52 0.16 145);
+  --accent: oklch(0.55 0.18 40);
+  --signal: oklch(0.5 0.13 165);
 }
-.mode-light .theme-ember {
+
+.mode-light .theme-signal,
+.theme-signal.mode-light {
+  --primary: oklch(0.48 0.15 165);
+  --primary-foreground: oklch(0.98 0.003 95);
+  --ring: oklch(0.48 0.15 165);
+  --accent: oklch(0.5 0.16 240);
+  --signal: oklch(0.45 0.16 150);
+}
+
+.mode-light .theme-ember,
+.theme-ember.mode-light {
   --primary: oklch(0.55 0.19 40);
   --primary-foreground: oklch(0.99 0.003 95);
   --ring: oklch(0.55 0.19 40);
   --accent: oklch(0.55 0.16 80);
+  --signal: oklch(0.5 0.18 25);
 }
-.mode-light .theme-void {
-  --primary: oklch(0.52 0.16 145);
+
+.mode-light .theme-cobalt,
+.theme-cobalt.mode-light {
+  --primary: oklch(0.46 0.18 245);
   --primary-foreground: oklch(0.99 0.003 95);
-  --ring: oklch(0.52 0.16 145);
+  --ring: oklch(0.46 0.18 245);
+  --accent: oklch(0.48 0.15 200);
+  --signal: oklch(0.48 0.15 150);
 }
-.mode-light .theme-paper {
-  --primary: oklch(0.22 0.006 285);
+
+.mode-light .theme-amethyst,
+.theme-amethyst.mode-light {
+  --primary: oklch(0.5 0.22 310);
+  --primary-foreground: oklch(0.99 0.003 95);
+  --ring: oklch(0.5 0.22 310);
+  --accent: oklch(0.48 0.16 200);
+  --signal: oklch(0.52 0.2 345);
+}
+
+.mode-light .theme-paper,
+.theme-paper.mode-light {
+  --primary: oklch(0.2 0.006 285);
   --primary-foreground: oklch(0.98 0.003 95);
+  --ring: oklch(0.2 0.006 285);
+  --border-strong: oklch(0.18 0.006 285);
 }
 
 /* Font pairings selectable from the admin panel */
@@ -191,6 +269,18 @@
 .font-archivo {
   --font-family-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-family-display: "Archivo", ui-sans-serif, sans-serif;
+}
+.font-jakarta {
+  --font-family-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-family-display: "Plus Jakarta Sans", ui-sans-serif, sans-serif;
+}
+.font-fira {
+  --font-family-mono: "Fira Code", ui-monospace, monospace;
+  --font-family-display: "Space Grotesk", ui-sans-serif, sans-serif;
+}
+.font-inter {
+  --font-family-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-family-display: "Inter", ui-sans-serif, sans-serif;
 }
 
 /* Layout density */

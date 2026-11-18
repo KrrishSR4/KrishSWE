@@ -65,9 +65,174 @@ export interface Repo {
   url: string;
 }
 
+export type ThemeId = "void" | "signal" | "ember" | "cobalt" | "amethyst" | "paper";
+export type FontId = "jetbrains" | "ibm" | "archivo" | "jakarta" | "fira" | "inter";
+
+export interface ThemeMeta {
+  id: ThemeId;
+  name: string;
+  tagline: string;
+  category: string;
+  recommendedFont: FontId;
+  previewColors: {
+    bg: string;
+    card: string;
+    primary: string;
+    accent: string;
+    signal: string;
+  };
+}
+
+export interface FontMeta {
+  id: FontId;
+  name: string;
+  display: string;
+  mono: string;
+  styleLabel: string;
+  sampleText: string;
+}
+
+export const THEMES_METADATA: ThemeMeta[] = [
+  {
+    id: "void",
+    name: "Void (Acid Obsidian)",
+    tagline: "High-contrast SRE Terminal & Kernel aesthetics with acid-lime signals.",
+    category: "Terminal Brutalist",
+    recommendedFont: "jetbrains",
+    previewColors: {
+      bg: "#16161a",
+      card: "#1f1f24",
+      primary: "#d4ff28",
+      accent: "#ff9142",
+      signal: "#2ee59d",
+    },
+  },
+  {
+    id: "signal",
+    name: "Signal (Cyber Emerald)",
+    tagline: "Observability, Datadog telemetry & Grafana incident ops emerald glow.",
+    category: "Cyber Observability",
+    recommendedFont: "fira",
+    previewColors: {
+      bg: "#121b1b",
+      card: "#182626",
+      primary: "#28f0b0",
+      accent: "#38bdf8",
+      signal: "#34d399",
+    },
+  },
+  {
+    id: "ember",
+    name: "Ember (Molten Rust)",
+    tagline: "High-concurrency systems, Rust / Go core war room with magma alerts.",
+    category: "Systems & Magma",
+    recommendedFont: "ibm",
+    previewColors: {
+      bg: "#1a1512",
+      card: "#271e18",
+      primary: "#ff8438",
+      accent: "#fbbf24",
+      signal: "#f87171",
+    },
+  },
+  {
+    id: "cobalt",
+    name: "Cobalt (Cloud Native)",
+    tagline: "Kubernetes, Docker Swarm & Azure/AWS enterprise cloud hyper-azure.",
+    category: "Enterprise Cloud",
+    recommendedFont: "jakarta",
+    previewColors: {
+      bg: "#0e1526",
+      card: "#162038",
+      primary: "#38bdf8",
+      accent: "#60a5fa",
+      signal: "#34d399",
+    },
+  },
+  {
+    id: "amethyst",
+    name: "Amethyst (Synthwave AI)",
+    tagline: "Frontier AI infrastructure, GPU clusters & cosmic neon violet vibe.",
+    category: "Frontier AI / Tech",
+    recommendedFont: "inter",
+    previewColors: {
+      bg: "#171024",
+      card: "#231838",
+      primary: "#c084fc",
+      accent: "#38bdf8",
+      signal: "#f472b6",
+    },
+  },
+  {
+    id: "paper",
+    name: "Paper (Swiss Monolith)",
+    tagline: "Dieter Rams architectural minimalism with pitch-black ink on alabaster.",
+    category: "Architectural Minimal",
+    recommendedFont: "archivo",
+    previewColors: {
+      bg: "#f8f8f6",
+      card: "#ffffff",
+      primary: "#18181b",
+      accent: "#ef4444",
+      signal: "#10b981",
+    },
+  },
+];
+
+export const FONTS_METADATA: FontMeta[] = [
+  {
+    id: "jetbrains",
+    name: "JetBrains + Space Grotesk",
+    display: "Space Grotesk",
+    mono: "JetBrains Mono",
+    styleLabel: "Cyber Terminal",
+    sampleText: "System status: HEALTHY (p99 14ms)",
+  },
+  {
+    id: "ibm",
+    name: "IBM Plex Mono Core",
+    display: "IBM Plex Mono",
+    mono: "IBM Plex Mono",
+    styleLabel: "Hardware Console",
+    sampleText: "0x7FFE -> Allocating 1024 GiB",
+  },
+  {
+    id: "archivo",
+    name: "Archivo + JetBrains",
+    display: "Archivo Display",
+    mono: "JetBrains Mono",
+    styleLabel: "Industrial Heavy",
+    sampleText: "DEPLOYMENT VELOCITY: 99.99%",
+  },
+  {
+    id: "jakarta",
+    name: "Jakarta + JetBrains",
+    display: "Plus Jakarta Sans",
+    mono: "JetBrains Mono",
+    styleLabel: "Modern Silicon Valley",
+    sampleText: "Distributed Cloud Architecture",
+  },
+  {
+    id: "fira",
+    name: "Space Grotesk + Fira Code",
+    display: "Space Grotesk",
+    mono: "Fira Code",
+    styleLabel: "Developer Engine",
+    sampleText: "const cluster = await k8s.init()",
+  },
+  {
+    id: "inter",
+    name: "Inter + JetBrains",
+    display: "Inter Display",
+    mono: "JetBrains Mono",
+    styleLabel: "Enterprise Clean",
+    sampleText: "High Availability Multi-Region",
+  },
+];
+
 export interface SiteSettings {
-  theme: "void" | "signal" | "ember" | "paper";
-  font: "jetbrains" | "ibm" | "archivo";
+  theme: ThemeId;
+  font: FontId;
   density: "compact" | "normal" | "spacious";
   sectionOrder: string[];
 }
@@ -175,15 +340,40 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       index: "02",
       name: "Distributed Job Queue",
       positioning: "Reliable asynchronous job processing at scale.",
-      summary: "An asynchronous distributed job processing system designed around a Redis-backed queue, PostgreSQL source of truth, and concurrent Go workers — with retries, scheduling, priorities, DLQ recovery, real-time updates, Kubernetes deployment, and production observability.",
-      tags: ["DISTRIBUTED SYSTEMS", "JOB QUEUE", "GO BACKEND", "REDIS", "KUBERNETES", "OBSERVABILITY", "SRE"],
-      stack: ["Go", "Redis", "PostgreSQL", "WebSocket", "Docker", "Kubernetes", "Terraform", "GitHub Actions", "Prometheus", "Grafana", "Loki", "Grafana Alloy"],
+      summary:
+        "An asynchronous distributed job processing system designed around a Redis-backed queue, PostgreSQL source of truth, and concurrent Go workers — with retries, scheduling, priorities, DLQ recovery, real-time updates, Kubernetes deployment, and production observability.",
+      tags: [
+        "DISTRIBUTED SYSTEMS",
+        "JOB QUEUE",
+        "GO BACKEND",
+        "REDIS",
+        "KUBERNETES",
+        "OBSERVABILITY",
+        "SRE",
+      ],
+      stack: [
+        "Go",
+        "Redis",
+        "PostgreSQL",
+        "WebSocket",
+        "Docker",
+        "Kubernetes",
+        "Terraform",
+        "GitHub Actions",
+        "Prometheus",
+        "Grafana",
+        "Loki",
+        "Grafana Alloy",
+      ],
       repo: "https://github.com/KrrishSR4/Distributed-job-queue",
       live: "https://djqangular.pages.dev/",
       status: "Production",
-      impact: "Transforms asynchronous workloads into a reliable processing pipeline with controlled concurrency, failure recovery, real-time visibility, and production-oriented infrastructure.",
-      problem: "Directly processing long-running or failure-prone workloads inside synchronous API requests creates unreliable execution, poor fault recovery, and limited control over concurrency. Key issues include asynchronous work, worker coordination, failure recovery, retries, queue backlog, priority handling, scheduled execution, and observability.",
-      solution: "The system separates job submission from execution using Redis as the transport layer and PostgreSQL as the source of truth. Go workers consume jobs concurrently while retry, scheduling, priority, cancellation, timeout recovery and DLQ mechanisms control the lifecycle.",
+      impact:
+        "Transforms asynchronous workloads into a reliable processing pipeline with controlled concurrency, failure recovery, real-time visibility, and production-oriented infrastructure.",
+      problem:
+        "Directly processing long-running or failure-prone workloads inside synchronous API requests creates unreliable execution, poor fault recovery, and limited control over concurrency. Key issues include asynchronous work, worker coordination, failure recovery, retries, queue backlog, priority handling, scheduled execution, and observability.",
+      solution:
+        "The system separates job submission from execution using Redis as the transport layer and PostgreSQL as the source of truth. Go workers consume jobs concurrently while retry, scheduling, priority, cancellation, timeout recovery and DLQ mechanisms control the lifecycle.",
       architecture: [
         "API accepts and persists jobs in PostgreSQL.",
         "Jobs are pushed into the Redis-backed queue.",
@@ -191,14 +381,14 @@ export const DEFAULT_CONTENT: PortfolioContent = {
         "Retry, priority, scheduling, timeout recovery and DLQ mechanisms control failures and execution.",
         "WebSocket streams job state changes to the dashboard.",
         "Prometheus, Grafana, Loki and Alloy provide metrics and centralized logs.",
-        "Docker and Kubernetes provide containerized deployment and scaling."
+        "Docker and Kubernetes provide containerized deployment and scaling.",
       ],
       metrics: [
         { label: "QUEUE", value: "REDIS" },
         { label: "WORKERS", value: "GO WORKER POOL" },
         { label: "DATABASE", value: "POSTGRESQL" },
-        { label: "RUNTIME", value: "DOCKER + K8S" }
-      ]
+        { label: "RUNTIME", value: "DOCKER + K8S" },
+      ],
     },
     {
       id: "repoxray",
@@ -274,7 +464,8 @@ export const DEFAULT_CONTENT: PortfolioContent = {
       id: "secureshare",
       index: "05",
       name: "SECURESHARE",
-      positioning: "PRIVACY-AWARE FILE SHARING WITH SECURE LINKS, ONE-TIME DOWNLOADS, AND DEVSECOPS.",
+      positioning:
+        "PRIVACY-AWARE FILE SHARING WITH SECURE LINKS, ONE-TIME DOWNLOADS, AND DEVSECOPS.",
       summary:
         "Secure file sharing designed around controlled access, temporary links, one-time downloads, expiration, revocation, audit logging, and automated security checks.",
       tags: [
